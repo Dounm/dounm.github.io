@@ -84,6 +84,24 @@
     </item>
     
     <item>
+      <title>Word2Vec-知其然知其所以然（二）：模型详解</title>
+      <link>https://dounm.github.io/post/word2vec_1/</link>
+      <pubDate>Sun, 11 Dec 2016 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/word2vec_1/</guid>
+      <description>系列文章分为两部分： Word2Vec-知其然知其所以然（一）：背景知识 Word2Vec-知其然知其所以然（二）：模型详解</description>
+    </item>
+    
+    <item>
+      <title>Word2Vec-知其然知其所以然（一）：背景知识</title>
+      <link>https://dounm.github.io/post/word2vec_0/</link>
+      <pubDate>Sat, 10 Dec 2016 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/word2vec_0/</guid>
+      <description>系列文章分为两部分： Word2Vec-知其然知其所以然（一）：背景知识 Word2Vec-知其然知其所以然（二）：模型详解</description>
+    </item>
+    
+    <item>
       <title>ps-lite源码剖析</title>
       <link>https://dounm.github.io/post/ps_lite/</link>
       <pubDate>Tue, 11 Oct 2016 23:46:08 +0800</pubDate>

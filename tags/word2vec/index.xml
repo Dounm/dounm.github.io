@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>word2vec on The Farm of Dounm</title>
+    <link>https://dounm.github.io/tags/word2vec/</link>
+    <description>Recent content in word2vec on The Farm of Dounm</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 11 Dec 2016 23:48:08 +0800</lastBuildDate>
+    
+	<atom:link href="https://dounm.github.io/tags/word2vec/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Word2Vec-知其然知其所以然（二）：模型详解</title>
+      <link>https://dounm.github.io/post/word2vec_1/</link>
+      <pubDate>Sun, 11 Dec 2016 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/word2vec_1/</guid>
+      <description>系列文章分为两部分： Word2Vec-知其然知其所以然（一）：背景知识 Word2Vec-知其然知其所以然（二）：模型详解</description>
+    </item>
+    
+    <item>
+      <title>Word2Vec-知其然知其所以然（一）：背景知识</title>
+      <link>https://dounm.github.io/post/word2vec_0/</link>
+      <pubDate>Sat, 10 Dec 2016 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/word2vec_0/</guid>
+      <description>系列文章分为两部分： Word2Vec-知其然知其所以然（一）：背景知识 Word2Vec-知其然知其所以然（二）：模型详解</description>
+    </item>
+    
+  </channel>
+</rss>

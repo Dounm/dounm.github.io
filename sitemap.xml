@@ -66,6 +66,20 @@
   </url>
   
   <url>
+    <loc>https://dounm.github.io/post/word2vec_1/</loc>
+    <lastmod>2016-12-11T23:48:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/post/word2vec_0/</loc>
+    <lastmod>2016-12-10T23:48:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://dounm.github.io/post/ps_lite/</loc>
     <lastmod>2016-10-11T23:46:08+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -208,6 +222,13 @@
   <url>
     <loc>https://dounm.github.io/tags/ps-lite/</loc>
     <lastmod>2016-10-11T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/tags/word2vec/</loc>
+    <lastmod>2016-12-11T23:48:08+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
