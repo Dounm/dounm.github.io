@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on The Farm of Dounm</title>
+    <link>https://dounm.github.io/categories/</link>
+    <description>Recent content in Categories on The Farm of Dounm</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 10 Apr 2017 23:46:08 +0800</lastBuildDate>
+    
+	<atom:link href="https://dounm.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Algorithm</title>
+      <link>https://dounm.github.io/categories/algorithm/</link>
+      <pubDate>Mon, 10 Apr 2017 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/categories/algorithm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>CUDA</title>
+      <link>https://dounm.github.io/categories/cuda/</link>
+      <pubDate>Wed, 12 Dec 2018 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/categories/cuda/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>DistributedComputing</title>
+      <link>https://dounm.github.io/categories/distributedcomputing/</link>
+      <pubDate>Tue, 11 Oct 2016 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/categories/distributedcomputing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MachineLearning</title>
+      <link>https://dounm.github.io/categories/machinelearning/</link>
+      <pubDate>Wed, 10 Jan 2018 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/categories/machinelearning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Meta-Knowledge</title>
+      <link>https://dounm.github.io/categories/meta-knowledge/</link>
+      <pubDate>Thu, 30 Aug 2018 10:21:24 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/categories/meta-knowledge/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>CUDA程序调优指南（二）：性能调优 - The Farm of Dounm</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Dounm" /><meta name="description" content="3. CUDA程序性能调优 对于一个CUDA kernel function而言，其通常由如下几个部分组成： kernel function paras local variables shared memory with __syncthreads__ call device function call loop/if &amp;lt;&amp;lt;&amp;lt;BlocksNum, ThreadsNumPerBlock&amp;gt;&amp;gt;&amp;gt; 我们分别考虑如何对这" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.52 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://dounm.github.io/post/cuda_1/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="CUDA程序调优指南（二）：性能调优" />
+<meta property="og:description" content="3. CUDA程序性能调优 对于一个CUDA kernel function而言，其通常由如下几个部分组成： kernel function paras local variables shared memory with __syncthreads__ call device function call loop/if &lt;&lt;&lt;BlocksNum, ThreadsNumPerBlock&gt;&gt;&gt; 我们分别考虑如何对这" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://dounm.github.io/post/cuda_1/" /><meta property="article:published_time" content="2018-12-12T23:47:08&#43;08:00"/>
+<meta property="article:modified_time" content="2018-12-12T23:47:08&#43;08:00"/>
+
+<meta itemprop="name" content="CUDA程序调优指南（二）：性能调优">
+<meta itemprop="description" content="3. CUDA程序性能调优 对于一个CUDA kernel function而言，其通常由如下几个部分组成： kernel function paras local variables shared memory with __syncthreads__ call device function call loop/if &lt;&lt;&lt;BlocksNum, ThreadsNumPerBlock&gt;&gt;&gt; 我们分别考虑如何对这">
+
+
+<meta itemprop="datePublished" content="2018-12-12T23:47:08&#43;08:00" />
+<meta itemprop="dateModified" content="2018-12-12T23:47:08&#43;08:00" />
+<meta itemprop="wordCount" content="1490">
+
+
+
+<meta itemprop="keywords" content="CUDA," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CUDA程序调优指南（二）：性能调优"/>
+<meta name="twitter:description" content="3. CUDA程序性能调优 对于一个CUDA kernel function而言，其通常由如下几个部分组成： kernel function paras local variables shared memory with __syncthreads__ call device function call loop/if &lt;&lt;&lt;BlocksNum, ThreadsNumPerBlock&gt;&gt;&gt; 我们分别考虑如何对这"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Even</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Even</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">CUDA程序调优指南（二）：性能调优</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-12-12 </span>
+        <div class="post-category">
+            <a href="/categories/cuda/"> CUDA </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#3-cuda程序性能调优">3. CUDA程序性能调优</a>
+<ul>
+<li><a href="#3-1-kernel-function-parameters">3.1 kernel function parameters</a></li>
+<li><a href="#3-2-local-variables">3.2 local variables</a></li>
+<li><a href="#3-3-shared-memory-with-syncthreads-call">3.3 shared memory with <code>__syncthreads__</code> call</a></li>
+<li><a href="#3-4-device-function-calls">3.4 device function calls</a></li>
+<li><a href="#3-5-loop-if">3.5 loop/if</a></li>
+<li><a href="#3-6-屠龙计-blocksnum-threadsnumperblock">3.6 屠龙计：BlocksNum, ThreadsNumPerBlock</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h2 id="3-cuda程序性能调优">3. CUDA程序性能调优</h2>
+
+<p>对于一个CUDA kernel function而言，其通常由如下几个部分组成：</p>
+
+<ul>
+<li>kernel function paras</li>
+<li>local variables</li>
+<li>shared memory with <code>__syncthreads__</code> call</li>
+<li>device function call</li>
+<li>loop/if</li>
+<li><code>&lt;&lt;&lt;BlocksNum, ThreadsNumPerBlock&gt;&gt;&gt;</code></li>
+</ul>
+
+<p>我们分别考虑如何对这些部分进行优化。</p>
+
+<h3 id="3-1-kernel-function-parameters">3.1 kernel function parameters</h3>
+
+<p><code>__global__</code> function的参数是存在constant mem里的，并且其大小被限制为4KB。</p>
+
+<p>通常来说，我们传入的参数都比较少，因此这些参数大部分是直接缓存在SM上的register上的，因此读取起来最快。但如果register不够用，那么就会被放到constant mem/cache上，速度就会变慢。</p>
+
+<h3 id="3-2-local-variables">3.2 local variables</h3>
+
+<p>对于单独的local var，其会被放在register里面，因此读写极快。</p>
+
+<p>对于数组类型的local var，根据访问pattern的不同，速度也不同（见<a href="https://devblogs.nvidia.com/fast-dynamic-indexing-private-arrays-cuda/">per-thread array的访问</a>）</p>
+
+<p>总结而言是这样的：</p>
+
+<ul>
+<li>【Static Indexing】：会被放到register里，读写极快</li>
+<li>【Dynamic indexing with Uniform Access】：会被放到Local Mem里，略慢。但 <strong>更高的math/load比</strong> 配合 <strong>缓存到L1/L2cache</strong>里，也可以很快</li>
+<li>【Dynamic indexing with Non-uniform Access】：由于会让SM产生多个访存指令，所以最慢。 但可以通过把其放到shared mem里加速</li>
+</ul>
+
+<h3 id="3-3-shared-memory-with-syncthreads-call">3.3 shared memory with <code>__syncthreads__</code> call</h3>
+
+<p>shared memory就如同2.3节所述，我们需要尽量避免bank confilicts，这样读取最快，一个cycle clock就可以读取128byte。</p>
+
+<p>除此之外，因为shared memory由同一block内的thread共享，所以在初始化shared mem之后，需要调用<code>__syncthreads__</code>来对同一block内的所有threads进行同步。</p>
+
+<h3 id="3-4-device-function-calls">3.4 device function calls</h3>
+
+<p>编译器会自行决定device function是否会被inlined（多数情况下会inline）。通常来说，inline会更好，因为少了函数调用的开销。</p>
+
+<p>我们可以用<a href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#noinline-and-forceinline"><strong>forceinline</strong></a>来给编译器提示</p>
+
+<h3 id="3-5-loop-if">3.5 loop/if</h3>
+
+<p>在书写kernel function时，应尽量避免loop/if，因为这两个在代码里引入了分支结构。</p>
+
+<p>如果代码有分支，那么</p>
+
+<ol>
+<li>SM首先执行那些进入first branch的threads，此时其余threads在等待</li>
+<li>然后执行进入second branch的threads，前面的线程等待。</li>
+</ol>
+
+<p>因此在可能的情况下，我们应该尽量<strong>使用模板参数来替换掉loop/if</strong>：</p>
+
+<ul>
+<li>如果if所判断的条件在kernel launch时就能确定（即作为kernel的一个parameter传入的），那就可以用模板参数来代替该parameter，这样编译器会自动优化掉另一分支。</li>
+<li>同理，如果for-loop的边界也在kernel launch时就能确定，那也可用模板参数代替。</li>
+</ul>
+
+<p>针对一些边界是常量（如0-&gt;5）的循环，在循环体足够简单的情况下，可以使用<code>#pragma unroll</code></p>
+
+<p>来告诉编译器展开该循环。</p>
+
+<h3 id="3-6-屠龙计-blocksnum-threadsnumperblock">3.6 屠龙计：BlocksNum, ThreadsNumPerBlock</h3>
+
+<blockquote>
+<p>朱泙漫学屠龙于支离益，单千金之家。三年技成，而无所用其巧</p>
+
+<p>&mdash;《庄子·列御寇》</p>
+</blockquote>
+
+<p><code>BlocksNum</code>和<code>ThreadsNumPerBlock</code>是执行kernel function时配置的值。这两个值通常都是经验求解，很难找到最优值。</p>
+
+<p>简单来说，</p>
+
+<ul>
+<li><code>ThreadsNumPerBlock</code>受限于device property的<code>MaxThreadsPerBlock</code>，经验取值为512/1024。</li>
+<li><code>BlocksNum</code>最大无限制，常见求解公式为$BlocksNum=SMCount * \frac{MaxThreadsPerSM}{ThreadsPerBlock}$。</li>
+</ul>
+
+<p>更详细的见《CUDA程序调优指南（三）：BlockNum和ThreadNumPerBlock》</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Dounm</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2018-12-12
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/cuda/">CUDA</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/cuda_2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">CUDA程序调优指南（三）：BlockNum和ThreadNumPerBlock</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/cuda_0/">
+            <span class="next-text nav-default">CUDA程序调优指南（一）：GPU硬件</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://dounm.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Dounm</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

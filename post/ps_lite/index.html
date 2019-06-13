@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ps-lite源码剖析 - The Farm of Dounm</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Dounm" /><meta name="description" content="1 ps-lite介绍 ps-lite框架是DMLC组自行实现的parameter server通信框架（注意仅是通信框架），是DMLC其他项目的" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.52 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://dounm.github.io/post/ps_lite/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="ps-lite源码剖析" />
+<meta property="og:description" content="1 ps-lite介绍 ps-lite框架是DMLC组自行实现的parameter server通信框架（注意仅是通信框架），是DMLC其他项目的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://dounm.github.io/post/ps_lite/" /><meta property="article:published_time" content="2016-10-11T23:46:08&#43;08:00"/>
+<meta property="article:modified_time" content="2016-10-11T23:46:08&#43;08:00"/>
+
+<meta itemprop="name" content="ps-lite源码剖析">
+<meta itemprop="description" content="1 ps-lite介绍 ps-lite框架是DMLC组自行实现的parameter server通信框架（注意仅是通信框架），是DMLC其他项目的">
+
+
+<meta itemprop="datePublished" content="2016-10-11T23:46:08&#43;08:00" />
+<meta itemprop="dateModified" content="2016-10-11T23:46:08&#43;08:00" />
+<meta itemprop="wordCount" content="3966">
+
+
+
+<meta itemprop="keywords" content="ps-lite,ParameterServer," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ps-lite源码剖析"/>
+<meta name="twitter:description" content="1 ps-lite介绍 ps-lite框架是DMLC组自行实现的parameter server通信框架（注意仅是通信框架），是DMLC其他项目的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Even</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Even</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">ps-lite源码剖析</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-10-11 </span>
+        <div class="post-category">
+            <a href="/categories/distributedcomputing/"> DistributedComputing </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-ps-lite介绍">1 ps-lite介绍</a></li>
+<li><a href="#2-源码剖析">2 源码剖析</a>
+<ul>
+<li><a href="#2-1-重要类">2.1 重要类</a>
+<ul>
+<li><a href="#2-1-1-postoffice">2.1.1 PostOffice</a></li>
+<li><a href="#2-1-2-van">2.1.2 Van</a></li>
+<li><a href="#2-1-3-customer">2.1.3 Customer</a></li>
+<li><a href="#2-1-4-simpleapp">2.1.4 SimpleApp</a></li>
+<li><a href="#2-1-5-kvworker">2.1.5 KVWorker</a></li>
+<li><a href="#2-1-6-kvserver">2.1.6 KVServer</a></li>
+<li><a href="#2-1-7-kvpairs">2.1.7 KVPairs</a></li>
+<li><a href="#2-1-8-sarray">2.1.8 SArray</a></li>
+</ul></li>
+<li><a href="#2-2-消息处理流程">2.2 消息处理流程</a></li>
+<li><a href="#2-3-实现细节">2.3 实现细节</a>
+<ul>
+<li><a href="#2-3-1-位运算表示node和node-group">2.3.1 位运算表示node和node group</a></li>
+<li><a href="#2-3-2-发送的数据结构kvpairs将keys数组和value数组拆开">2.3.2 发送的数据结构KVPairs将keys数组和value数组拆开</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#3-简单的例子">3 简单的例子</a></li>
+<li><a href="#4-延伸阅读">4 延伸阅读</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h2 id="1-ps-lite介绍">1 ps-lite介绍</h2>
+
+<p>ps-lite框架是DMLC组自行实现的parameter server通信框架（注意仅是通信框架），是DMLC其他项目的核心，例如其深度学习框架MXNET就依赖了ps-lite的实现。</p>
+
+<h2 id="2-源码剖析">2 源码剖析</h2>
+
+<blockquote>
+<p>针对的源码的commit-id为：36b015f</p>
+</blockquote>
+
+<h3 id="2-1-重要类">2.1 重要类</h3>
+
+<h4 id="2-1-1-postoffice">2.1.1 PostOffice</h4>
+
+<p>PostOffice是全局管理类。每个节点中都有且只有一个该类的对象。</p>
+
+<p>主要用来配置当前node的一些信息，例如当前node是哪种类型(server,worker,scheduler)，nodeid是啥，以及worker/server 的rank 到 node id的转换。</p>
+
+<p>Postoffice类利用<strong>Singleton模式</strong>来保证只有一个对象。</p>
+
+<h4 id="2-1-2-van">2.1.2 Van</h4>
+
+<p>核心通信类，每个节点只有一个该对象，是Postoffice对象的成员。</p>
+
+<p>Van类负责建立起节点之间的互相连接（例如Worker与Scheduler之间的连接），并且开启本地的receiving thread用来监听收到的message。</p>
+
+<p>Van的子类为ZMQVan，即为用zmq库实现了连接的底层细节（zmq库是一个开源库，对socket进行了优良的封装）</p>
+
+<h4 id="2-1-3-customer">2.1.3 Customer</h4>
+
+<p>用于通信的对象。</p>
+
+<p>每个Customer都与某个node id相绑定，代表当前节点发送到对应node id节点。</p>
+
+<p>Customer对象维护request和response的状态，其中<code>tracker_</code>成员记录每个请求可能发送给了多少节点以及从多少个节点返回。
+<code>tracker_</code> 下标为每个req标识的timestamp。</p>
+
+<p>Customer也会启动一个receiving thread，而它接受到的消息来自于Van的receiving thread，即每个节点的Van对象收到message后，根据message的不同，推送到不同的customer对象中。</p>
+
+<h4 id="2-1-4-simpleapp">2.1.4 SimpleApp</h4>
+
+<p>简单的通信类。每次通信发送int型的head和string型的body。</p>
+
+<p>SimpleApp对象中包括一个Customer对象用来控制请求连接。</p>
+
+<h4 id="2-1-5-kvworker">2.1.5 KVWorker</h4>
+
+<p>继承自SimpleApp，包括如下方法： <code>Push()</code>,<code>Pull()</code>,<code>Wait()</code>。</p>
+
+<p><code>Push()</code>和<code>Pull()</code>最后都会调用<code>Send()</code>函数，<code>Send()</code>对KVPairs进行切分，因为每个Server只保留一部分参数，因此切分后的SlicedKVpairs就会被发送给不同的Server。</p>
+
+<p>切分函数可以由用户自行重写，默认为<code>DefaultSlicer</code>，每个SlicedKVPairs被包装成Message对象，然后用<code>van::send()</code>发送。</p>
+
+<h4 id="2-1-6-kvserver">2.1.6 KVServer</h4>
+
+<p>继承自SimpleApp，包含如下方法：<code>Process()</code>和<code>Response()</code>。</p>
+
+<p><code>Process()</code>被注册到Customer对象中，当Customer对象的receiving thread接受到消息时，就调用<code>Process()</code>对数据进行处理。<code>Process()</code>内部的逻辑是调用 用户自行实现的一个<code>std::function</code>函数对象 对数据进行处理。</p>
+
+<p><code>Response()</code>就仅仅是向调用的worker发送信息</p>
+
+<h4 id="2-1-7-kvpairs">2.1.7 KVPairs</h4>
+
+<p>拥有<code>keys</code>, <code>values</code>, <code>lens</code>等3个数组。lens和keys大小相等，表示每个key对应的value的个数。lens可为空，此时values被平分。</p>
+
+<p>举例而言，
+若keys=[1,5]，lens=[2,3]，那么values[0],values[1]就对应的是keys[0]，而values[2],values[3],values[5]对应的就是keys[1]。
+而如果len为空，则<code>values.size()</code>必须是<code>keys.size()</code>（此处为2）的倍数，key[0]和key[1]各对应一半的values。</p>
+
+<h4 id="2-1-8-sarray">2.1.8 SArray</h4>
+
+<p>shared array，用<code>std::shared_ptr</code>实现的数组，用于替代<code>std::vector</code>，避免数组的深拷贝。</p>
+
+<h3 id="2-2-消息处理流程">2.2 消息处理流程</h3>
+
+<p>无论是worker节点还是server节点，在程序的最开始都会执行<code>Postoffice::start()</code>。<code>Postoffice::start()</code>会初始化节点信息，并且调用<code>Van::start()</code>。而<code>Van::start()</code>则会让当前节点与Scheduler节点相连，并且<strong>启动一个本地线程recv thread</strong>来持续监听收到的message。</p>
+
+<p>worker和server都继承自SimpleApp类，所以都有一个customer对象。
+customer对象本身也会<strong>启动一个recv thread</strong>，其中调用注册的<code>recv_handle_</code>函数对消息进行处理。</p>
+
+<p>对于worker来说，其注册的<code>recv_handle_</code>是<code>KVWorker::Process()</code>函数。因为worker的recv thread接受到的消息主要是从server处pull下来的KV对，因此该<code>Process()</code>主要是接收message中的KV对；</p>
+
+<p>而对于Server来说，其注册的<code>recv_handle_</code>是<code>KVServer::Process()</code>函数。因此server接受的是worker们push上来的KV对，需要对其进行处理，因此该<code>Process()</code>函数中调用的用户通过<code>KVServer::set_request_handle()</code>传入的函数对象。</p>
+
+<p>每个customer对象都拥有一个<code>tracker_</code>(<code>std::vector&lt;std::pair&lt;int, int&gt;&gt;</code>类型)用来记录每个请求发送和返回的数量。
+<code>tracker_</code>的下标即为请求的timestamp，<code>tracker_[t].first</code>是该请求发送给了多少节点，<code>tracker[t]_.second</code>是该请求收到了多少节点的回复。
+<code>customer::Wait()</code>就是一直阻塞直到<code>tracker_[t].first == tracker[t].second</code>，用这个来控制同步异步依赖。</p>
+
+<p>每当<code>Van</code>的recv thread收到一个message时，就会根据customer id的不同将message发给不同的customer的recv thread。
+同时该message对应的请求（设为req）则<code>tracker_[req.timestamp].second++</code>。</p>
+
+<h3 id="2-3-实现细节">2.3 实现细节</h3>
+
+<h4 id="2-3-1-位运算表示node和node-group">2.3.1 位运算表示node和node group</h4>
+
+<p>因为有时请求要发送给多个节点，所以ps-lite用了一个map来存储<strong>每个id对应的实际的node节点</strong>。</p>
+
+<p>其中id：1,2,4分别表示Scheduler, ServerGroup, WorkerGroup。
+这样只需要将请求的目标节点的id 设为4，便意味着将该请求发送到所有的worker node。</p>
+
+<p>除此之外，如果某worker想要向所有的server和scheduler同时发送请求，则只需要将目标node_id设为3即可。因为$3=2+1=KServerGroup+kScheduler$。</p>
+
+<p>这正是为什么会选择1,2,4的原因，因为在二进制下：$1=001,2=010,4=100$。因此1-7内任意一个数字都代表的是Scheduler/ServerGroup/WorkerGroup的某一种组合。</p>
+
+<p>1-7的id表示的是node group，而后续的id（即$8,9,10,\cdots$）则表示单个的node。
+其中$8,10,12,\cdots$表示$worker0,worker1,worker2,\cdots$ （即$2n+8$）；$9,11,13,\cdots$表示$server0,server1,server2,\cdots$（即$2n+9$）</p>
+
+<p>如此来说，对于每一个新节点，需要将其对应多个id上。例如对于worker2来说，需要将它与4,4+1,4+2,4+1+2,12这4个id相对应。</p>
+
+<h4 id="2-3-2-发送的数据结构kvpairs将keys数组和value数组拆开">2.3.2 发送的数据结构KVPairs将keys数组和value数组拆开</h4>
+
+<p>KVPairs的数据结构并非按照 <code>vector&lt;pair&lt;key, vector&lt;values&gt;&gt;&gt;</code>，而是按照<code>vector&lt;key&gt;</code>, <code>vector&lt;values&gt;</code>来组成。
+这是因为，对于worker来说，它所拥有的部分数据集train data通常都是不变的，那这些数据集所引用的keys通常也是不变的。
+这样的话，worker和server之间互相通信的时候，就可以不发送vector<keys>，仅发送vector<values>了，可以降低一部分网络带宽。</p>
+
+<h2 id="3-简单的例子">3 简单的例子</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">#include &lt;iostream&gt;
+#include &#34;ps/ps.h&#34;
+using namespace std;
+using namespace ps;
+template &lt;class Val&gt;
+class KVServerDefaultHandle1 {      //functor，用与处理server收到的来自worker的请求
+public:
+    // req_meta是存储该请求的一些元信息，即请求来自于哪个节点，发送给哪个节点等等
+    // req_data即发送过来的数据
+    // server即指向当前server对象的指针
+    void operator() (const KVMeta&amp; req_meta, const KVPairs&lt;Val&gt;&amp; req_data, KVServer&lt;Val&gt;* server) {
+        size_t n = req_data.keys.size();
+        KVPairs&lt;Val&gt; res;
+        if (req_meta.push) { //收到的是push请求
+            CHECK_EQ(n, req_data.vals.size());
+        } else {            //收到的是pull请求
+            res.keys = req_data.keys;
+            res.vals.resize(n);
+        }
+        for (size_t i = 0;i &lt; n; ++i) {
+            Key key = req_data.keys[i];
+            if (req_meta.push) {    //push请求
+                store[key] += req_data.vals[i]; //此处的操作是将相同key的value相加
+            } else {                    //pull请求
+                res.vals[i] = store[key];
+            }
+        }
+        server-&gt;Response(req_meta, res);
+    }
+private:
+    std::unordered_map&lt;Key, Val&gt; store;
+};
+void StartServer() {
+    if (!IsServer()) return;
+    cout &lt;&lt; &#34;num of workers[&#34; &lt;&lt; NumWorkers() &lt;&lt; &#34;]&#34; &lt;&lt; endl;
+    cout &lt;&lt; &#34;num of servers[&#34; &lt;&lt; NumServers() &lt;&lt; &#34;]&#34; &lt;&lt; endl;
+    auto server = new KVServer&lt;float&gt;(0);
+    server-&gt;set_request_handle(KVServerDefaultHandle1&lt;float&gt;());   //注册functor
+    RegisterExitCallback([server](){ delete server; });
+}
+void RunWorker() {
+    if (!IsWorker()) return;
+    cout &lt;&lt; &#34;start Worker rank = &#34; &lt;&lt; MyRank() &lt;&lt; endl;
+    KVWorker&lt;float&gt; kv(0);
+    // init
+    int num = 10;
+    vector&lt;Key&gt; keys(num);
+    vector&lt;float&gt; vals(num);
+    int rank = MyRank();
+    for (int i = 0;i &lt; num; ++i) {
+        keys[i] = i;
+        vals[i] = i+10;
+    }
+    // push
+    int repeat = 1;
+    vector&lt;int&gt; ts;
+    for (int i = 0;i &lt; repeat; ++i) {
+        ts.push_back(kv.Push(keys, vals));  //kv.Push()返回的是该请求的timestamp
+    }
+    for (int t : ts) kv.Wait(t);
+    // pull
+    std::vector&lt;float&gt; rets;
+    kv.Wait(kv.Pull(keys, &amp;rets));
+    for (size_t i = 0;i &lt; rets.size(); ++i) {
+        cout &lt;&lt; MyRank() &lt;&lt; &#34; rets[&#34; &lt;&lt; i &lt;&lt; &#34;]: &#34; &lt;&lt; rets[i] &lt;&lt; endl;
+    }
+    cout &lt;&lt; endl;
+}
+int main(int argc, char* argv[]) {
+    StartServer();
+    Start();    //启动,Postoffice::start()
+    RunWorker();
+    Finalize(); //结束。每个节点都需要执行这个函数。
+    return 0;
+}</pre></td></tr></table>
+</div>
+</div>
+<p>运行结果（1个server，3个worker的情况）：
+<img src="https://raw.githubusercontent.com/Dounm/TheFarmOfDounm/master/resources/images/ps-lite/ps-lite_0.png" alt="ps-lite_0" /></p>
+
+<h2 id="4-延伸阅读">4 延伸阅读</h2>
+
+<p><a href="https://www.zybuluo.com/Dounm/note/517675">parameter server入门和理解</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Dounm</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2016-10-11
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/ps-lite/">ps-lite</a>
+          <a href="/tags/parameterserver/">ParameterServer</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/sum_of_how_to_read_a_book/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">[读书笔记] 如何阅读一本书</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/parameter_server/">
+            <span class="next-text nav-default">ParameterServer入门和理解</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://dounm.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Dounm</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

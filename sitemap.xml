@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml-stylesheet type="text/xsl" href="https://dounm.github.io/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://dounm.github.io/about/</loc>
+    <lastmod>2017-08-28T21:41:52+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/post/cuda_2/</loc>
+    <lastmod>2018-12-12T23:48:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/post/cuda_1/</loc>
+    <lastmod>2018-12-12T23:47:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/post/cuda_0/</loc>
+    <lastmod>2018-12-12T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/post/manage_your_energy/</loc>
+    <lastmod>2018-08-30T10:21:24+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/post/gbdt_0/</loc>
+    <lastmod>2018-01-10T23:48:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/post/gbdt_1/</loc>
+    <lastmod>2018-01-10T23:48:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/post/kmp/</loc>
+    <lastmod>2017-04-10T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/post/sum_of_how_to_read_a_book/</loc>
+    <lastmod>2016-12-12T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/post/ps_lite/</loc>
+    <lastmod>2016-10-11T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/post/parameter_server/</loc>
+    <lastmod>2016-10-10T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/post/why_do_i_write/</loc>
+    <lastmod>2016-09-12T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/post/scala/</loc>
+    <lastmod>2016-09-10T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/post/spark/</loc>
+    <lastmod>2016-09-10T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/categories/algorithm/</loc>
+    <lastmod>2017-04-10T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/tags/cuda/</loc>
+    <lastmod>2018-12-12T23:48:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/categories/cuda/</loc>
+    <lastmod>2018-12-12T23:48:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/categories/</loc>
+    <lastmod>2017-04-10T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/categories/distributedcomputing/</loc>
+    <lastmod>2016-10-11T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/tags/gbdt/</loc>
+    <lastmod>2018-01-10T23:48:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/tags/kmp/</loc>
+    <lastmod>2017-04-10T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/categories/machinelearning/</loc>
+    <lastmod>2018-01-10T23:48:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/categories/meta-knowledge/</loc>
+    <lastmod>2018-08-30T10:21:24+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/tags/parameterserver/</loc>
+    <lastmod>2016-10-11T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/post/</loc>
+    <lastmod>2018-12-12T23:48:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/tags/scala/</loc>
+    <lastmod>2016-09-10T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/tags/spark/</loc>
+    <lastmod>2016-09-10T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/tags/</loc>
+    <lastmod>2018-12-12T23:48:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/</loc>
+    <lastmod>2017-08-28T21:41:52+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/tags/ps-lite/</loc>
+    <lastmod>2016-10-11T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/tags/%E5%86%99%E4%BD%9C/</loc>
+    <lastmod>2016-09-12T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/tags/%E6%8B%96%E5%BB%B6/</loc>
+    <lastmod>2018-08-30T10:21:24+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/tags/%E6%95%88%E7%8E%87/</loc>
+    <lastmod>2018-08-30T10:21:24+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://dounm.github.io/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2016-12-12T23:46:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+</urlset>

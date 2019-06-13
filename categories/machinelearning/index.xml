@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MachineLearning on The Farm of Dounm</title>
+    <link>https://dounm.github.io/categories/machinelearning/</link>
+    <description>Recent content in MachineLearning on The Farm of Dounm</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 10 Jan 2018 23:48:08 +0800</lastBuildDate>
+    
+	<atom:link href="https://dounm.github.io/categories/machinelearning/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>GBDT算法详解（一）：决策树与Boosting算法</title>
+      <link>https://dounm.github.io/post/gbdt_0/</link>
+      <pubDate>Wed, 10 Jan 2018 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/gbdt_0/</guid>
+      <description>系列文章分为两部分： GBDT算法详解（一）：决策树与Boosting算法 GBDT算法详解（二）：GBDT与Xgboost</description>
+    </item>
+    
+    <item>
+      <title>GBDT算法详解（二）：GBDT与Xgboost</title>
+      <link>https://dounm.github.io/post/gbdt_1/</link>
+      <pubDate>Wed, 10 Jan 2018 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/gbdt_1/</guid>
+      <description>系列文章分为两部分： GBDT算法详解（一）：决策树与Boosting算法 GBDT算法详解（二）：GBDT与Xgboost</description>
+    </item>
+    
+  </channel>
+</rss>

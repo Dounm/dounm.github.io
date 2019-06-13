@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>The Farm of Dounm</title>
+    <link>https://dounm.github.io/</link>
+    <description>Recent content on The Farm of Dounm</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 20 Aug 2017 21:38:52 +0800</lastBuildDate>
+    
+	<atom:link href="https://dounm.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>About</title>
+      <link>https://dounm.github.io/about/</link>
+      <pubDate>Sun, 20 Aug 2017 21:38:52 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/about/</guid>
+      <description>Hugo is a static site engine written in Go.
+It makes use of a variety of open source projects including:
+ Cobra Viper J Walter Weatherman Cast  Learn more and contribute on GitHub.</description>
+    </item>
+    
+    <item>
+      <title>CUDA程序调优指南（三）：BlockNum和ThreadNumPerBlock</title>
+      <link>https://dounm.github.io/post/cuda_2/</link>
+      <pubDate>Wed, 12 Dec 2018 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/cuda_2/</guid>
+      <description>（以下纯属经验而谈，并非一定准确） x. ThreadNumPerBlock 对于ThreadNumPerBlock而言，其上限由硬件限制，有两个因素 一个是MaxThreadsPe</description>
+    </item>
+    
+    <item>
+      <title>CUDA程序调优指南（二）：性能调优</title>
+      <link>https://dounm.github.io/post/cuda_1/</link>
+      <pubDate>Wed, 12 Dec 2018 23:47:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/cuda_1/</guid>
+      <description>3. CUDA程序性能调优 对于一个CUDA kernel function而言，其通常由如下几个部分组成： kernel function paras local variables shared memory with __syncthreads__ call device function call loop/if &amp;lt;&amp;lt;&amp;lt;BlocksNum, ThreadsNumPerBlock&amp;gt;&amp;gt;&amp;gt; 我们分别考虑如何对这</description>
+    </item>
+    
+    <item>
+      <title>CUDA程序调优指南（一）：GPU硬件</title>
+      <link>https://dounm.github.io/post/cuda_0/</link>
+      <pubDate>Wed, 12 Dec 2018 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/cuda_0/</guid>
+      <description>1. GPU的硬件结构与执行原理 1.1 GPU Thread的层次 在逻辑上，threads分为如下三个层次： thread：每个thread都会运行一次ker</description>
+    </item>
+    
+    <item>
+      <title>管理你的精力，而非时间</title>
+      <link>https://dounm.github.io/post/manage_your_energy/</link>
+      <pubDate>Thu, 30 Aug 2018 10:21:24 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/manage_your_energy/</guid>
+      <description>最近一段时间，或者说从踏入工作以来，我就一直在思考时间管理的事情。 起因就是每天下班回家之后，我都没法静下心来思考和学习，只能打打游戏，玩玩手</description>
+    </item>
+    
+    <item>
+      <title>GBDT算法详解（一）：决策树与Boosting算法</title>
+      <link>https://dounm.github.io/post/gbdt_0/</link>
+      <pubDate>Wed, 10 Jan 2018 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/gbdt_0/</guid>
+      <description>系列文章分为两部分： GBDT算法详解（一）：决策树与Boosting算法 GBDT算法详解（二）：GBDT与Xgboost</description>
+    </item>
+    
+    <item>
+      <title>GBDT算法详解（二）：GBDT与Xgboost</title>
+      <link>https://dounm.github.io/post/gbdt_1/</link>
+      <pubDate>Wed, 10 Jan 2018 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/gbdt_1/</guid>
+      <description>系列文章分为两部分： GBDT算法详解（一）：决策树与Boosting算法 GBDT算法详解（二）：GBDT与Xgboost</description>
+    </item>
+    
+    <item>
+      <title>KMP算法详细理解和推导</title>
+      <link>https://dounm.github.io/post/kmp/</link>
+      <pubDate>Mon, 10 Apr 2017 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/kmp/</guid>
+      <description>1. 字符串匹配的朴素做法 （称被匹配串为str，匹配串为pat） 朴素的字符串匹配算法就是每次将pat后移一位，然后继续从pat的第一位开始比较。</description>
+    </item>
+    
+    <item>
+      <title>[读书笔记] 如何阅读一本书</title>
+      <link>https://dounm.github.io/post/sum_of_how_to_read_a_book/</link>
+      <pubDate>Mon, 12 Dec 2016 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/sum_of_how_to_read_a_book/</guid>
+      <description>读完《如何阅读一本书》后整理的思维导图如下：</description>
+    </item>
+    
+    <item>
+      <title>ps-lite源码剖析</title>
+      <link>https://dounm.github.io/post/ps_lite/</link>
+      <pubDate>Tue, 11 Oct 2016 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/ps_lite/</guid>
+      <description>1 ps-lite介绍 ps-lite框架是DMLC组自行实现的parameter server通信框架（注意仅是通信框架），是DMLC其他项目的</description>
+    </item>
+    
+    <item>
+      <title>ParameterServer入门和理解</title>
+      <link>https://dounm.github.io/post/parameter_server/</link>
+      <pubDate>Mon, 10 Oct 2016 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/parameter_server/</guid>
+      <description>1. Parameter Server介绍 参数服务器是一个编程框架，用于方便分布式并行程序的编写，其中重点在于对大规模参数的分布式存储和协同的支持。 机器学习系统相</description>
+    </item>
+    
+    <item>
+      <title>为什么我要写文章</title>
+      <link>https://dounm.github.io/post/why_do_i_write/</link>
+      <pubDate>Mon, 12 Sep 2016 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/why_do_i_write/</guid>
+      <description>长久以来，我都非常羡慕那些写得一手好文章的人。他们的文章，条理清晰，结构明了，情感充沛，或是感人至深，或是幽默风趣，读起来都不禁令人心旷神怡</description>
+    </item>
+    
+    <item>
+      <title>Scala语法简介</title>
+      <link>https://dounm.github.io/post/scala/</link>
+      <pubDate>Sat, 10 Sep 2016 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/scala/</guid>
+      <description>1. Scala语言特性 Scala(short for Scalable Language)是一种混合了面向对象和函数式编程的语言。 具有如下特性： 面向对象：Scala是一种纯的面向对象语言</description>
+    </item>
+    
+    <item>
+      <title>Spark上手指南</title>
+      <link>https://dounm.github.io/post/spark/</link>
+      <pubDate>Sat, 10 Sep 2016 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/spark/</guid>
+      <description>本文旨在给初学者一个对于Spark快速上手的指南。 目的：在读完本文后可以写出简单的Spark Application，并在本地或集群上运行。 1.</description>
+    </item>
+    
+  </channel>
+</rss>

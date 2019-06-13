@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Scala语法简介 - The Farm of Dounm</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Dounm" /><meta name="description" content="1. Scala语言特性 Scala(short for Scalable Language)是一种混合了面向对象和函数式编程的语言。 具有如下特性： 面向对象：Scala是一种纯的面向对象语言" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.52 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://dounm.github.io/post/scala/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Scala语法简介" />
+<meta property="og:description" content="1. Scala语言特性 Scala(short for Scalable Language)是一种混合了面向对象和函数式编程的语言。 具有如下特性： 面向对象：Scala是一种纯的面向对象语言" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://dounm.github.io/post/scala/" /><meta property="article:published_time" content="2016-09-10T23:46:08&#43;08:00"/>
+<meta property="article:modified_time" content="2016-09-10T23:46:08&#43;08:00"/>
+
+<meta itemprop="name" content="Scala语法简介">
+<meta itemprop="description" content="1. Scala语言特性 Scala(short for Scalable Language)是一种混合了面向对象和函数式编程的语言。 具有如下特性： 面向对象：Scala是一种纯的面向对象语言">
+
+
+<meta itemprop="datePublished" content="2016-09-10T23:46:08&#43;08:00" />
+<meta itemprop="dateModified" content="2016-09-10T23:46:08&#43;08:00" />
+<meta itemprop="wordCount" content="1215">
+
+
+
+<meta itemprop="keywords" content="Scala,Spark," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Scala语法简介"/>
+<meta name="twitter:description" content="1. Scala语言特性 Scala(short for Scalable Language)是一种混合了面向对象和函数式编程的语言。 具有如下特性： 面向对象：Scala是一种纯的面向对象语言"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Even</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Even</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Scala语法简介</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-09-10 </span>
+        <div class="post-category">
+            <a href="/categories/distributedcomputing/"> DistributedComputing </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-scala语言特性">1. Scala语言特性</a></li>
+<li><a href="#2-scala基本语法">2. Scala基本语法</a>
+<ul>
+<li><a href="#2-1-注释">2.1. 注释</a></li>
+<li><a href="#2-2-分号">2.2. 分号</a></li>
+<li><a href="#2-3-package">2.3. Package</a></li>
+<li><a href="#2-4-if-else">2.4. if-else</a></li>
+<li><a href="#2-5-loop">2.5. Loop</a></li>
+<li><a href="#2-6-变量">2.6. 变量</a></li>
+<li><a href="#2-7-class">2.7. Class</a></li>
+<li><a href="#2-8-function">2.8. Function</a></li>
+<li><a href="#2-9-array">2.9. Array</a></li>
+<li><a href="#2-10-collection">2.10. Collection</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h2 id="1-scala语言特性">1. Scala语言特性</h2>
+
+<p>Scala(short for Scalable Language)是一种混合了面向对象和函数式编程的语言。</p>
+
+<p>具有如下特性：</p>
+
+<ul>
+<li>面向对象：Scala是一种纯的面向对象语言，每一个value都是对象</li>
+<li>函数式：Scala也支持函数式编程，每一个函数都是value。并且支持很多函数式编程的特性：
+
+<ul>
+<li>anonymous function</li>
+<li>higher-order function</li>
+<li>nested functions</li>
+<li>currying等等</li>
+</ul></li>
+<li>Scala是静态类型语言，使用type inference来推导变量类型而无需显示说明类型</li>
+<li>Scala跑在JVM上，并且能执行Java代码，使用Java库，语法和Java也很类似</li>
+</ul>
+
+<h2 id="2-scala基本语法">2. Scala基本语法</h2>
+
+<h3 id="2-1-注释">2.1. 注释</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">//单行注释
+/*多行注释*/</pre></td></tr></table>
+</div>
+</div>
+<h3 id="2-2-分号">2.2. 分号</h3>
+
+<p>行末无需分号。但是对于多个语句在同一行时，需要分号<code>;</code>隔离</p>
+
+<h3 id="2-3-package">2.3. Package</h3>
+
+<p>同java</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"><span class="kn">package</span> <span class="nx">com</span><span class="p">.</span><span class="nx">xxx</span><span class="p">.</span><span class="nx">xxx</span>
+<span class="kn">import</span> <span class="nx">com</span><span class="p">.</span><span class="nx">xxx</span><span class="p">.</span><span class="nx">xxx</span></pre></td></tr></table>
+</div>
+</div>
+<h3 id="2-4-if-else">2.4. if-else</h3>
+
+<p>同java。但有时可以压缩为一个表达式</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">if(condition) res1 else res2</pre></td></tr></table>
+</div>
+</div>
+<h3 id="2-5-loop">2.5. Loop</h3>
+
+<p>for loop：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">/*for loop execution with range*/
+for( a &lt;- 1 to 3; b &lt; 1 until 3){
+    println( &#34;Value of a: &#34; + a );
+    println( &#34;Value of b: &#34; + b );
+}
+//1 until 3 not include 3
+//1 to 3 include 3
+//the for loop will iterate all possible computations
+
+/* for loop execution with a collection*/
+val numList = List(1,2,3,4,5,6);
+for( a &lt;- numList ){
+    println( &#34;Value of a: &#34; + a
+);</pre></td></tr></table>
+</div>
+</div>
+<p>while loop: 同java
+do-while loop: 同java</p>
+
+<h3 id="2-6-变量">2.6. 变量</h3>
+
+<p>分为<strong>可变变量</strong>和<strong>不可变变量</strong>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">var myVar : String = &#34;Foo&#34;      //mutable variable
+myVar = &#34;Bar&#34;
+
+val myVal : String = &#34;Foo&#34;      //immutable variable
+
+val myVal2 = &#34;Foo&#34;              //type inference
+
+/*multiple assignment*/
+val (myVar1: Int, myVar2: String) = Pair(40, &#34;Foo&#34;)     
+val (myVar1, myVar2) = Pair(40, &#34;Foo&#34;)</pre></td></tr></table>
+</div>
+</div>
+<h3 id="2-7-class">2.7. Class</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">/*class without constructor*/
+class SimpleGreeter {
+  val greeting = &#34;Hello, world!&#34;
+  def greet() = println(greeting)
+}
+val g = new SimpleGreeter
+g.greet()
+ 
+/*class with primary constructor*/
+//类的定义内，任何不在method内的代码，都默认是primary constructor的代码
+class CarefulGreeter(greeting: String) {
+  if (greeting == null) {
+    throw new NullPointerException(&#34;greeting was null&#34;)
+  }
+  def greet() = println(greeting)
+}
+new CarefulGreeter(null)</pre></td></tr></table>
+</div>
+</div>
+<h3 id="2-8-function">2.8. Function</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">//function declaration
+def functionName ([list of parameters]) [:return type]
+
+//function definition
+ def functionName ([list of parameters]) [:return type] = {
+   function body
+   return [expr]
+}
+
+/*
+如果函数体内有return表达式，则[:return type]不可省略。
+如果没有return表达式，则[:return type]可省略，而把最后一个表达式的值默认为返回值
+*/
+def hello(name:String=&#34;Spark&#34;):String ={
+    return &#34;hello&#34; +name
+}
+def hello(name:String=&#34;Spark&#34;)={
+    &#34;hello&#34; +name
+}
+
+//函数体内只有一个表达式时，可以省略{}
+def square(x: Int): Int =
+   x * x           
+
+//对于递归函数，不可以省略: return type
+//如果省略=，则函数不返回值（即返回的类型为Unit）
+
+/*匿名函数*/
+var mul = (x:Int, y:Int) =&gt; x*y
+mul(2,3)</pre></td></tr></table>
+</div>
+</div>
+<h3 id="2-9-array">2.9. Array</h3>
+
+<p>Array是可变对象，元素需要未相同类型。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">var z = new Array[String](3)
+var z = Array(&#34;1&#34;,&#34;123&#34;,&#34;asd&#34;)
+ 
+z(0) //访问第一个元素，值为&#34;1&#34;
+z(1) //值为&#34;123&#34;
+ 
+ 
+z(0) = &#34;heh&#34;
+ 
+ 
+z.distinct
+z.filter(x =&gt; x&gt;0) //过滤掉Array中小于等于0的元素（使用匿名函数）
+z.filter(x =&gt; x&lt;0) //过滤掉Array中大于等于0的元素</pre></td></tr></table>
+</div>
+</div>
+<h3 id="2-10-collection">2.10. Collection</h3>
+
+<p>Collectin分为两种：</p>
+
+<ul>
+<li>List：不可变对象。元素必须是相同类型</li>
+<li>Tuple：不可变对象。元素无须是相同类型</li>
+</ul>
+
+<p>举例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">// Define List of integers.
+val x = List(1,2,3,4)
+x(0) //访问List的第一个元素，值为1
+ 
+// Define a set.
+var x = Set(1,3,5,7)
+ 
+// Define a map.
+val x = Map(&#34;one&#34; -&gt; 1, &#34;two&#34; -&gt; 2, &#34;three&#34; -&gt; 3)
+ 
+// Create a tuple of two elements.
+val x = (10, &#34;Scala&#34;)
+x._1 //1-based,访问Tuple的第一个元素，值为10
+x._2 //访问Tuple的第二个元素，值为&#34;Scala&#34;</pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Dounm</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2016-09-10
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/scala/">Scala</a>
+          <a href="/tags/spark/">Spark</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/why_do_i_write/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">为什么我要写文章</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/spark/">
+            <span class="next-text nav-default">Spark上手指南</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://dounm.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Dounm</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

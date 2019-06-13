@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ParameterServer on The Farm of Dounm</title>
+    <link>https://dounm.github.io/tags/parameterserver/</link>
+    <description>Recent content in ParameterServer on The Farm of Dounm</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 11 Oct 2016 23:46:08 +0800</lastBuildDate>
+    
+	<atom:link href="https://dounm.github.io/tags/parameterserver/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>ps-lite源码剖析</title>
+      <link>https://dounm.github.io/post/ps_lite/</link>
+      <pubDate>Tue, 11 Oct 2016 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/ps_lite/</guid>
+      <description>1 ps-lite介绍 ps-lite框架是DMLC组自行实现的parameter server通信框架（注意仅是通信框架），是DMLC其他项目的</description>
+    </item>
+    
+    <item>
+      <title>ParameterServer入门和理解</title>
+      <link>https://dounm.github.io/post/parameter_server/</link>
+      <pubDate>Mon, 10 Oct 2016 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/parameter_server/</guid>
+      <description>1. Parameter Server介绍 参数服务器是一个编程框架，用于方便分布式并行程序的编写，其中重点在于对大规模参数的分布式存储和协同的支持。 机器学习系统相</description>
+    </item>
+    
+  </channel>
+</rss>

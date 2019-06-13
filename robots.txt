@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://dounm.github.io/sitemap.xml

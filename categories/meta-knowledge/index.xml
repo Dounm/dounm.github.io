@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Meta-Knowledge on The Farm of Dounm</title>
+    <link>https://dounm.github.io/categories/meta-knowledge/</link>
+    <description>Recent content in Meta-Knowledge on The Farm of Dounm</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 30 Aug 2018 10:21:24 +0800</lastBuildDate>
+    
+	<atom:link href="https://dounm.github.io/categories/meta-knowledge/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>管理你的精力，而非时间</title>
+      <link>https://dounm.github.io/post/manage_your_energy/</link>
+      <pubDate>Thu, 30 Aug 2018 10:21:24 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/manage_your_energy/</guid>
+      <description>最近一段时间，或者说从踏入工作以来，我就一直在思考时间管理的事情。 起因就是每天下班回家之后，我都没法静下心来思考和学习，只能打打游戏，玩玩手</description>
+    </item>
+    
+    <item>
+      <title>[读书笔记] 如何阅读一本书</title>
+      <link>https://dounm.github.io/post/sum_of_how_to_read_a_book/</link>
+      <pubDate>Mon, 12 Dec 2016 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/sum_of_how_to_read_a_book/</guid>
+      <description>读完《如何阅读一本书》后整理的思维导图如下：</description>
+    </item>
+    
+    <item>
+      <title>为什么我要写文章</title>
+      <link>https://dounm.github.io/post/why_do_i_write/</link>
+      <pubDate>Mon, 12 Sep 2016 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/why_do_i_write/</guid>
+      <description>长久以来，我都非常羡慕那些写得一手好文章的人。他们的文章，条理清晰，结构明了，情感充沛，或是感人至深，或是幽默风趣，读起来都不禁令人心旷神怡</description>
+    </item>
+    
+  </channel>
+</rss>

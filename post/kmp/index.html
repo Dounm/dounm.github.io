@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>KMP算法详细理解和推导 - The Farm of Dounm</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Dounm" /><meta name="description" content="1. 字符串匹配的朴素做法 （称被匹配串为str，匹配串为pat） 朴素的字符串匹配算法就是每次将pat后移一位，然后继续从pat的第一位开始比较。" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.52 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://dounm.github.io/post/kmp/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="KMP算法详细理解和推导" />
+<meta property="og:description" content="1. 字符串匹配的朴素做法 （称被匹配串为str，匹配串为pat） 朴素的字符串匹配算法就是每次将pat后移一位，然后继续从pat的第一位开始比较。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://dounm.github.io/post/kmp/" /><meta property="article:published_time" content="2017-04-10T23:46:08&#43;08:00"/>
+<meta property="article:modified_time" content="2017-04-10T23:46:08&#43;08:00"/>
+
+<meta itemprop="name" content="KMP算法详细理解和推导">
+<meta itemprop="description" content="1. 字符串匹配的朴素做法 （称被匹配串为str，匹配串为pat） 朴素的字符串匹配算法就是每次将pat后移一位，然后继续从pat的第一位开始比较。">
+
+
+<meta itemprop="datePublished" content="2017-04-10T23:46:08&#43;08:00" />
+<meta itemprop="dateModified" content="2017-04-10T23:46:08&#43;08:00" />
+<meta itemprop="wordCount" content="1334">
+
+
+
+<meta itemprop="keywords" content="KMP," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="KMP算法详细理解和推导"/>
+<meta name="twitter:description" content="1. 字符串匹配的朴素做法 （称被匹配串为str，匹配串为pat） 朴素的字符串匹配算法就是每次将pat后移一位，然后继续从pat的第一位开始比较。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Even</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Even</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">KMP算法详细理解和推导</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-04-10 </span>
+        <div class="post-category">
+            <a href="/categories/algorithm/"> Algorithm </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-字符串匹配的朴素做法">1. 字符串匹配的朴素做法</a></li>
+<li><a href="#2-kmp如何利用已有信息">2. KMP如何利用已有信息</a></li>
+<li><a href="#3-kmp的具体实现">3. KMP的具体实现</a></li>
+<li><a href="#4-kmp的实现代码">4. KMP的实现代码</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h2 id="1-字符串匹配的朴素做法">1. 字符串匹配的朴素做法</h2>
+
+<p>（称被匹配串为<code>str</code>，匹配串为<code>pat</code>）
+朴素的字符串匹配算法就是每次将<code>pat</code>后移一位，然后继续从<code>pat</code>的第一位开始比较。</p>
+
+<p>但其实我们已经获取了信息<strong>『不匹配位置的前面的字符都是匹配的』</strong>.
+朴素做法并没有利用到这个信息，而KMP就是要利用这个信息加快速度。</p>
+
+<h2 id="2-kmp如何利用已有信息">2. KMP如何利用已有信息</h2>
+
+<ol>
+<li>首先<code>pat</code>必然是要后退，关键在于后退几位。</li>
+<li>设我们已经知道匹配的子串是『ABCADAB』，这代表了两层含义：
+
+<ol>
+<li><code>pat</code>的前7位是『ABCADAB』，<code>pat</code>是『ABCADABxxx』</li>
+<li><code>str</code>在当前匹配位置的7位子串是『ABCADAB』，<code>str</code>是『xxxABCADABxxx..xx』</li>
+</ol></li>
+<li>若用朴素的做法将<code>pat</code>后退的过程中：
+
+<ol>
+<li>后退1步：<code>str</code>在当前匹配位置是『BCADABxxxx』，<code>pat</code>是『ABCADABxxx』，第一位就不匹配</li>
+<li>后退2步：<code>str</code>是『CADABxxxxx』，<code>pat</code>是『ABCADABxxx』，第一位就不匹配</li>
+<li>后退3步：<code>str</code>是『ADABxxxxxx』，<code>pat</code>是『ABCADABxxx』，第一位匹配，第二位不匹配</li>
+<li>后退4步：<code>str</code>是『DABxxxxxxx』，<code>pat</code>是『ABCADABxxx』，第一位就不匹配</li>
+<li>后退5步：<code>str</code>是『ABxxxxxxxx』，<code>pat</code>是『ABCADABxxx』，第一位和第二位都匹配，后面是否匹配无法根据现有信息得到，需要进一步获得<code>str</code>后续的子串是什么。</li>
+</ol></li>
+<li>我们可以发现：朴素的匹配算法中后退1-4步都是不匹配的，而这4种不匹配的情况都可以根据已得信息（即步骤2获得信息）判断出来其不匹配。当后退5步的时候，无法根据已得信息得知是否匹配，就需要进一步进行匹配。</li>
+<li>而KMP算法的目标就是<strong>利用已得信息（即步骤2获得的信息）来消除后退1-4步这些无用匹配</strong>。</li>
+</ol>
+
+<h2 id="3-kmp的具体实现">3. KMP的具体实现</h2>
+
+<ol>
+<li>那么KMP具体怎么实现的呢？
+
+<ol>
+<li>仔细观察上例发现，当匹配的子串是『ABCADAB』时，后退1-4步无效，可以直接跳到后退5步</li>
+<li>根据3.e的情况，后退5步时，<code>str</code>是『ABxxxxxxxx』，开头的两个字符是『ABCADAB』的后两位后缀『AB』。而<code>pat</code>是『ABCADABxxx』，前两位前缀正好是『AB』。</li>
+<li>再结合后退1-4步的情况，我们发现所有后退的情况，<code>str</code>的开头都是匹配的子串『ABCADAB』的后缀；<code>pat</code>都是『ABCADAB』的前缀。</li>
+<li>因此，只要我们遍历『ABCADAB』的所有的<code>&lt;前缀，后缀&gt;</code>对，找到相等且最长的前后缀对即可。</li>
+<li>对于『ABCADAB』，相等且最长的前后缀对就是<code>&lt;前缀=AB，后缀=AB&gt;</code>，长度为2。而『ABCADAB』长度为7，因此我们可以直接后退7-2=5步即可。</li>
+</ol></li>
+<li>因此，KMP的思想就是：<strong>找到匹配子串相等且最长的前后缀对，然后用匹配子串的长度减去前后缀对的长度，即得到要后退的步数</strong>。</li>
+<li>注意，匹配的子串必然是<code>pat</code>的前缀，而且<code>pat</code>的每一个前缀都有可能是匹配的子串。所以我们只需提前对<code>pat</code>子串进行一次处理即刻，记录下<code>pat</code>的每个前缀作为匹配的子串时，相等且最长的前后缀对的长度即可。（即代码里的<code>next</code>数组）</li>
+</ol>
+
+<h2 id="4-kmp的实现代码">4. KMP的实现代码</h2>
+
+<p>附上我用<code>Python</code>实现的KMP算法的代码：<a href="https://github.com/Dounm/Fun-Programs/blob/master/string-matching/kmp.py">Dounm/Fun-Programs/string-matching/kmp.py</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Dounm</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2017-04-10
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/kmp/">KMP</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/gbdt_1/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">GBDT算法详解（二）：GBDT与Xgboost</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/sum_of_how_to_read_a_book/">
+            <span class="next-text nav-default">[读书笔记] 如何阅读一本书</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://dounm.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Dounm</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

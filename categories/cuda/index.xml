@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CUDA on The Farm of Dounm</title>
+    <link>https://dounm.github.io/categories/cuda/</link>
+    <description>Recent content in CUDA on The Farm of Dounm</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 12 Dec 2018 23:48:08 +0800</lastBuildDate>
+    
+	<atom:link href="https://dounm.github.io/categories/cuda/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>CUDA程序调优指南（三）：BlockNum和ThreadNumPerBlock</title>
+      <link>https://dounm.github.io/post/cuda_2/</link>
+      <pubDate>Wed, 12 Dec 2018 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/cuda_2/</guid>
+      <description>（以下纯属经验而谈，并非一定准确） x. ThreadNumPerBlock 对于ThreadNumPerBlock而言，其上限由硬件限制，有两个因素 一个是MaxThreadsPe</description>
+    </item>
+    
+    <item>
+      <title>CUDA程序调优指南（二）：性能调优</title>
+      <link>https://dounm.github.io/post/cuda_1/</link>
+      <pubDate>Wed, 12 Dec 2018 23:47:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/cuda_1/</guid>
+      <description>3. CUDA程序性能调优 对于一个CUDA kernel function而言，其通常由如下几个部分组成： kernel function paras local variables shared memory with __syncthreads__ call device function call loop/if &amp;lt;&amp;lt;&amp;lt;BlocksNum, ThreadsNumPerBlock&amp;gt;&amp;gt;&amp;gt; 我们分别考虑如何对这</description>
+    </item>
+    
+    <item>
+      <title>CUDA程序调优指南（一）：GPU硬件</title>
+      <link>https://dounm.github.io/post/cuda_0/</link>
+      <pubDate>Wed, 12 Dec 2018 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/cuda_0/</guid>
+      <description>1. GPU的硬件结构与执行原理 1.1 GPU Thread的层次 在逻辑上，threads分为如下三个层次： thread：每个thread都会运行一次ker</description>
+    </item>
+    
+  </channel>
+</rss>

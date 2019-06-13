@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Algorithm on The Farm of Dounm</title>
+    <link>https://dounm.github.io/categories/algorithm/</link>
+    <description>Recent content in Algorithm on The Farm of Dounm</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 10 Apr 2017 23:46:08 +0800</lastBuildDate>
+    
+	<atom:link href="https://dounm.github.io/categories/algorithm/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>KMP算法详细理解和推导</title>
+      <link>https://dounm.github.io/post/kmp/</link>
+      <pubDate>Mon, 10 Apr 2017 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/kmp/</guid>
+      <description>1. 字符串匹配的朴素做法 （称被匹配串为str，匹配串为pat） 朴素的字符串匹配算法就是每次将pat后移一位，然后继续从pat的第一位开始比较。</description>
+    </item>
+    
+  </channel>
+</rss>

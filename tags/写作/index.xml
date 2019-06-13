@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>写作 on The Farm of Dounm</title>
+    <link>https://dounm.github.io/tags/%E5%86%99%E4%BD%9C/</link>
+    <description>Recent content in 写作 on The Farm of Dounm</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 12 Sep 2016 23:46:08 +0800</lastBuildDate>
+    
+	<atom:link href="https://dounm.github.io/tags/%E5%86%99%E4%BD%9C/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>为什么我要写文章</title>
+      <link>https://dounm.github.io/post/why_do_i_write/</link>
+      <pubDate>Mon, 12 Sep 2016 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/why_do_i_write/</guid>
+      <description>长久以来，我都非常羡慕那些写得一手好文章的人。他们的文章，条理清晰，结构明了，情感充沛，或是感人至深，或是幽默风趣，读起来都不禁令人心旷神怡</description>
+    </item>
+    
+  </channel>
+</rss>

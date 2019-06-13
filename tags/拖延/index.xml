@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>拖延 on The Farm of Dounm</title>
+    <link>https://dounm.github.io/tags/%E6%8B%96%E5%BB%B6/</link>
+    <description>Recent content in 拖延 on The Farm of Dounm</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 30 Aug 2018 10:21:24 +0800</lastBuildDate>
+    
+	<atom:link href="https://dounm.github.io/tags/%E6%8B%96%E5%BB%B6/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>管理你的精力，而非时间</title>
+      <link>https://dounm.github.io/post/manage_your_energy/</link>
+      <pubDate>Thu, 30 Aug 2018 10:21:24 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/manage_your_energy/</guid>
+      <description>最近一段时间，或者说从踏入工作以来，我就一直在思考时间管理的事情。 起因就是每天下班回家之后，我都没法静下心来思考和学习，只能打打游戏，玩玩手</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>CUDA程序调优指南（一）：GPU硬件 - The Farm of Dounm</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Dounm" /><meta name="description" content="1. GPU的硬件结构与执行原理 1.1 GPU Thread的层次 在逻辑上，threads分为如下三个层次： thread：每个thread都会运行一次ker" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.52 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://dounm.github.io/post/cuda_0/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="CUDA程序调优指南（一）：GPU硬件" />
+<meta property="og:description" content="1. GPU的硬件结构与执行原理 1.1 GPU Thread的层次 在逻辑上，threads分为如下三个层次： thread：每个thread都会运行一次ker" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://dounm.github.io/post/cuda_0/" /><meta property="article:published_time" content="2018-12-12T23:46:08&#43;08:00"/>
+<meta property="article:modified_time" content="2018-12-12T23:46:08&#43;08:00"/>
+
+<meta itemprop="name" content="CUDA程序调优指南（一）：GPU硬件">
+<meta itemprop="description" content="1. GPU的硬件结构与执行原理 1.1 GPU Thread的层次 在逻辑上，threads分为如下三个层次： thread：每个thread都会运行一次ker">
+
+
+<meta itemprop="datePublished" content="2018-12-12T23:46:08&#43;08:00" />
+<meta itemprop="dateModified" content="2018-12-12T23:46:08&#43;08:00" />
+<meta itemprop="wordCount" content="4668">
+
+
+
+<meta itemprop="keywords" content="CUDA," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CUDA程序调优指南（一）：GPU硬件"/>
+<meta name="twitter:description" content="1. GPU的硬件结构与执行原理 1.1 GPU Thread的层次 在逻辑上，threads分为如下三个层次： thread：每个thread都会运行一次ker"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Even</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Even</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">CUDA程序调优指南（一）：GPU硬件</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-12-12 </span>
+        <div class="post-category">
+            <a href="/categories/cuda/"> CUDA </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-gpu的硬件结构与执行原理">1. GPU的硬件结构与执行原理</a>
+<ul>
+<li><a href="#1-1-gpu-thread的层次">1.1 GPU Thread的层次</a></li>
+<li><a href="#1-2-streaming-multiprocessor">1.2 Streaming Multiprocessor</a></li>
+<li><a href="#1-3-simt-single-instruction-multi-thread">1.3 SIMT：Single Instruction Multi Thread</a></li>
+<li><a href="#1-4-hardward-multithreading">1.4 Hardward Multithreading</a></li>
+</ul></li>
+<li><a href="#2-gpu的内存层次memory-hierarchy">2. GPU的内存层次Memory Hierarchy</a>
+<ul>
+<li><a href="#2-1-global-memory">2.1 Global Memory</a>
+<ul>
+<li><a href="#2-1-1-device-memory">2.1.1 device memory</a></li>
+<li><a href="#2-1-2-l1-l2-cache">2.1.2 L1/L2 Cache</a></li>
+</ul></li>
+<li><a href="#2-2-local-memory">2.2 Local  Memory</a></li>
+<li><a href="#2-3-shared-memory">2.3 Shared Memory</a></li>
+<li><a href="#2-4-constant-memory">2.4 Constant Memory</a></li>
+<li><a href="#2-5-register">2.5 Register</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h2 id="1-gpu的硬件结构与执行原理">1. GPU的硬件结构与执行原理</h2>
+
+<h3 id="1-1-gpu-thread的层次">1.1 GPU Thread的层次</h3>
+
+<p>在逻辑上，threads分为如下三个层次：</p>
+
+<ol>
+<li>thread：每个thread都会运行一次kernel function，threads之间平等无优先级。</li>
+<li>block：一组线程，通常放在SM上执行。</li>
+<li>grid：一组blocks。通常一次kernel function调用的所有thread都放在一个grid中。</li>
+</ol>
+
+<p>而在硬件上，threads仅有两个层次：</p>
+
+<ol>
+<li>core：真正执行一个thread的硬件</li>
+<li>warp：硬件上并行执行的32个线程，同一warp的thread执行同一条指令</li>
+</ol>
+
+<h3 id="1-2-streaming-multiprocessor">1.2 Streaming Multiprocessor</h3>
+
+<p>GPU由多个<strong>multithreaded Streaming Multiprocessos(SMs)</strong>构成。以1080显卡为例（Compute Capability 6.1）为例，其有20个SM。每个SM包括128个CUDA cores和4个warp scheduler。</p>
+
+<p>当要执行一个*kernel grid*时，该grid中的blocks会被分配给可用的SM。</p>
+
+<ul>
+<li><p>一个block中的所有threads都是【并发的，concurrently】在一个SM上执行的</p></li>
+
+<li><p>多个block的threads也可以并发的在一个SM上执行</p></li>
+</ul>
+
+<p>如果一个block执行完毕，那么新的block会被放到空出来的SM上执行。</p>
+
+<p>SM的设计目的时并发执行几百个线程，因此使用了**SIMT, Single Instruction Multi Thread **的架构。</p>
+
+<p>在SM内部有两种级别的并行：</p>
+
+<ol>
+<li>指令级别：单线程（单core）内部的instruction-level parallelism。（芯片内部的指令流水线）。</li>
+<li>线程级别：硬件上的多个core的thread-level parallelism（通过硬件上的多线程）</li>
+</ol>
+
+<h3 id="1-3-simt-single-instruction-multi-thread">1.3 SIMT：Single Instruction Multi Thread</h3>
+
+<p>在SM内部，threads以<strong>warp</strong>为单位被创建/管理/调度和执行，每个warp包括32个threads。</p>
+
+<p>当将一个或多个blocks分配给SM时，它会首先将其分成多个warp。（每个warp所包含的thread都是按threadID有序递增的），然后使用<strong>warp scheduler</strong>来调度执行每个warp。</p>
+
+<p>一个warp内的32个threads在同一时间执行同一条指令，所以当32个thread的执行路径完全一致时效率最高。</p>
+
+<p>如果有data-dependent的分支，那么warp会分别执行每一个分支路径，不在当前分支的threads会被停用。</p>
+
+<h3 id="1-4-hardward-multithreading">1.4 Hardward Multithreading</h3>
+
+<p>每个warp的执行上下文execution context（program counters, registers, etc.）在整个生命周期里都是被保存在on-chip mem上的。</p>
+
+<p>因此从一个execution context切换到另一个execution context是无消耗的，在每个instruction issue time里，一个warp scheduler都会选择一个warp，该warp中的threads需要做好准备执行下个instruction，然后给向这个warp里的threads发出指令。</p>
+
+<p>具体而言，每个Multiprocessor都有</p>
+
+<ul>
+<li>一组32-bit registers（按照warp数来分配）</li>
+<li>一个【parallel data cache/shared memory】（按照thread blocks数来分配）</li>
+</ul>
+
+<p>这两个条件就决定了一个SM上能同时【并发的】存在多少个warps和blocks。（同时也有最大值限制）</p>
+
+<p>如果一个block需要的registers/shared mems都无法满足，那么kernel就会失败。</p>
+
+<p>更细节一些，即在每个instruction issue time，一个warp scheduler都会选择一个准备好的warp发出指令。<strong>等待warp准备好的这段时间（number of clock cycles）就是【latency】</strong>。要达到完全的利用率，就需要所有的warp scheduler在latency这段时间的每个clock cycles都可以发出指令给其他warp，即掩盖掉latency。</p>
+
+<p>因此，一个SM内越多的warp通常就会带来越高的利用率，性能越高。（后续会详细讨论）</p>
+
+<h2 id="2-gpu的内存层次memory-hierarchy">2. GPU的内存层次Memory Hierarchy</h2>
+
+<p>在了解GPU的内存层次之前，我们先了解下如下术语：</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">术语</th>
+<th>解释</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">Cache Line</td>
+<td>每次读或写内存时，即使只操作一个值，也是会把一小块内存读取到Cache里的。这一小块被读取到Cache的内存就叫【Cache Line】，其大小称之为【Cache Line Size】</td>
+</tr>
+
+<tr>
+<td align="left">Memory Transaction</td>
+<td>a transaction is the movement of a unit of data between two regions of memory。例如，从Mem到L2 Cache的一次拷贝就是一次Mem Transaction。</td>
+</tr>
+
+<tr>
+<td align="left">Register Spilling</td>
+<td>某些应该放到register的变量，由于register不够大，而放到了mem中（GPU中是放在Local Mem）</td>
+</tr>
+
+<tr>
+<td align="left">Natrually Aligned</td>
+<td>any item is aligned to at least a multiple of its own size。例如4Byte的对象的地址必须能整除4；8Byte的对象的地址必须能整除8</td>
+</tr>
+</tbody>
+</table>
+
+<p>粗略来看，GPU的内存层次如下</p>
+
+<p><img src="https://raw.githubusercontent.com/Dounm/TheFarmOfDounm/master/resources/images/cuda/0.png" alt="Memory Hierarchy." /></p>
+
+<h3 id="2-1-global-memory">2.1 Global Memory</h3>
+
+<p>Global Memory就是我们在书写CUDA程序时最常使用的内存，<code>cudaMemcpy</code>也是从CPU 内存拷贝到Global Memory。</p>
+
+<p>Global Mem能被所有thread访问，其在GPU的位置和Cache如下：</p>
+
+<ul>
+<li>位置：device memory</li>
+<li>Cache：L1/L2</li>
+</ul>
+
+<h4 id="2-1-1-device-memory">2.1.1 device memory</h4>
+
+<p>device memory并非位于SM内部，而是由所有SM共享。因此访问速度较慢，需要Cache缓存加速。</p>
+
+<p>除此之外，device memory必须通过32/64/128-byte的【memory transaction】访问，并且要求这些memory transaction是aligned to their size。</p>
+
+<blockquote>
+<p>举例而言，即读取32-byte的memory transaction时，地址必须是32的倍数；读取64-byte的mem transaction时，地址必须是64的倍数</p>
+</blockquote>
+
+<p>当一个warp执行指令（load/store）来访问Global mem时，它会根据【每个thread访问的word的大小】和【每个thread访问的地址关系】来把该访存指令聚合成一个或多个memory transaction。</p>
+
+<p>举例而言，如果每个thread访问4byte的word，则一个warp（32个thread）就需要访问32*4=128byte的内存。</p>
+
+<ul>
+<li>如果这32个word时连续且对齐的，那么只需要 一个128-byte memory transaction 或 四个32-byte mem transaction即可。</li>
+<li>如果连续，但起始地址并未对齐128byte，那么需要 两个128-byte memory transaction 或 五个32-byte mem transaction。</li>
+<li>如果不连续，那么SM会将能放在一个128-byte mem transaction的thread的访存操作聚合成一个128-byte mem transaction，因此会产生多个128-byte memory transaction。(32-byte mem trans同理)</li>
+</ul>
+
+<p>针对于每个thread所读取的word，若word size是1/2/4/8/16 byte，且是<a href="onenote:#GPU的MemCache&amp;section-id={5C77B0DB-D635-4E98-9899-D7852F21785F}&amp;page-id={7847E1B9-8CF9-465D-8419-333CEE0088F8}&amp;object-id={B772E8B5-9194-4B31-A577-B39F9AA189ED}&amp;D&amp;base-path=https://d.docs.live.net/606463c833bea118/Documents/Distribute%20Computing/GPU.one">Naturally Aligned</a>，则会被编译成一个memory instruction。（后续同一个warp的memory instruction会进行聚合）</p>
+
+<p>如果不满足size和alignment的条件，那么当前thread的该次mem access就会被编译为多个mem instruction，因此变慢。</p>
+
+<h4 id="2-1-2-l1-l2-cache">2.1.2 L1/L2 Cache</h4>
+
+<p>Global Memory的读取会被缓存到L2（有时也会缓存到const cache），通过可配置选项可以选择是否缓存到L1。</p>
+
+<ul>
+<li><p>如果Mem Access同时缓存在L1/L2上，那么是通过128-byte mem transaction来实现的</p></li>
+
+<li><p>如果Mem Access仅缓存在L2上，那么是通过32-byte mem transaction来实现的</p></li>
+</ul>
+
+<p>（因此，仅缓存在L2对分散的内存读取有好处，可以减少over-fetch）</p>
+
+<p>即，L1的Cache Line Size = 128 byte，L2的Cache Line Size = 32 byte。所以当L1/L2共存时，取最大的Cache Line Size。</p>
+
+<p>L2 Cache有如下特点:</p>
+
+<ul>
+<li><p><strong>所有的SM共享一个L2 Cache</strong></p></li>
+
+<li><p>用来缓存对global/local memory的读取。</p></li>
+
+<li><p>有时也会用来处理<a href="onenote:#GPU的MemCache&amp;section-id={5C77B0DB-D635-4E98-9899-D7852F21785F}&amp;page-id={7847E1B9-8CF9-465D-8419-333CEE0088F8}&amp;object-id={666E7C1D-9939-42DD-863A-3192F83CB330}&amp;D&amp;base-path=https://d.docs.live.net/606463c833bea118/Documents/Distribute%20Computing/GPU.one">Register Spilling</a></p></li>
+</ul>
+
+<p>（可以通过device property中的<code>l2CacheSize</code>来查看其大小）</p>
+
+<h3 id="2-2-local-memory">2.2 Local  Memory</h3>
+
+<p>每个thread都拥有自己私有的local memory，负责存储一些局部变量（automatic variable）。</p>
+
+<p>对于局部变量而说，一些小型的局部变量会被放到register里，当register不够用时，则会被放到Local Mem中。</p>
+
+<p>Local Mem的位置和Cache如下：</p>
+
+<ul>
+<li>位置：device memory</li>
+<li>Cache：L1/L2</li>
+</ul>
+
+<p>由于local mem也是放在device memory上，所以其和global mem很像。即access latency和bandwidth都和global mem一样低，一些内存对齐的约束也得满足。</p>
+
+<p>有一点local mem独有的优化是：如果warp内的threads同时访问相同的local mem里的relative address（e.g. same index in an array variable, same member in a structure variable），memory access are fully coalesced。</p>
+
+<blockquote>
+<p>这应该和Local Mem在device memory的排列相关。</p>
+</blockquote>
+
+<h3 id="2-3-shared-memory">2.3 Shared Memory</h3>
+
+<p>shared memory位于thread block这一层，即每个block共享一块shared mem，这块shared mem对该block内的所有threads可见，且当该block执行结束时，其所占用的shared mem也会被释放。</p>
+
+<p>shared mem的位置和cache如下：</p>
+
+<ul>
+<li>位置：on-chip memory</li>
+<li>cache：无，因为是on-chip的，读取速度够快不需要cache</li>
+</ul>
+
+<p>shared mem本身位于芯片上，所以读取速度很快，可以作为software-managed cache来加速的执行。</p>
+
+<blockquote>
+<p>L1/L2 cache上存储什么数据无法由程序来直接控制，但我们可以控制shared mem上存储什么数据。</p>
+</blockquote>
+
+<p>在硬件上，shared memory 被分成32（对应warp中的thread个数）个相等大小的【bank 内存块】。</p>
+
+<ul>
+<li>每个bank的带宽是32 bits per clock cycle</li>
+<li>连续的32-bit words是放在连续的32个banks中</li>
+</ul>
+
+<p>这32个内存块们可以同时被访问：</p>
+
+<ul>
+<li><p>若32个thread各自访问32个bank的word，就只需要一次内存传输就行。</p></li>
+
+<li><p>若不同thread访问同一个bank的不同32-bit word，就产生了【bank conflict】，access就会被序列化，需要多次内存传输。</p></li>
+
+<li><p>若不同thread访问同一个bank的相同word，不会产生bank conflict，仅需要一次内存传输，此时触发【broadcast】，word会被广播给多个thread。</p></li>
+</ul>
+
+<blockquote>
+<p>关于shared memory的32个bank的图示见<a href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#shared-memory-5-x">H.4.3. Shared Memory</a></p>
+</blockquote>
+
+<h3 id="2-4-constant-memory">2.4 Constant Memory</h3>
+
+<p>Constant Memory，顾名思义是用来存储只读数据的内存。</p>
+
+<p>此处的【只读】针对的是device code的只读，我们可以通过Host向Constant Memory写入数据（通过<code>cudaMemcpyToSymbol()</code>的接口），然后在device code中读取。</p>
+
+<p>常见的Constant Memory大小为64KB，其位置和Cache如下：</p>
+
+<ul>
+<li>位置：device memory</li>
+<li>Cache：constant cache（比L1/L2快）</li>
+</ul>
+
+<h3 id="2-5-register">2.5 Register</h3>
+
+<p>Register位于SM上，每个SM都有固定数目的一组threads。每个thread使用的register越少，就有越多的block/threads可以并发的位于同一SM上，进而提高性能。</p>
+
+<p>每个thread使用的register的数目由编译器【启发式】的决定。但我们也可以通过<a href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#launch-bounds">Launch Bounds</a>提供一些信息协助编译器更好的决定。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Dounm</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2018-12-12
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/cuda/">CUDA</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/cuda_1/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">CUDA程序调优指南（二）：性能调优</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/manage_your_energy/">
+            <span class="next-text nav-default">管理你的精力，而非时间</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://dounm.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Dounm</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

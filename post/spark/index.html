@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Spark上手指南 - The Farm of Dounm</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Dounm" /><meta name="description" content="本文旨在给初学者一个对于Spark快速上手的指南。 目的：在读完本文后可以写出简单的Spark Application，并在本地或集群上运行。 1." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.52 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://dounm.github.io/post/spark/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Spark上手指南" />
+<meta property="og:description" content="本文旨在给初学者一个对于Spark快速上手的指南。 目的：在读完本文后可以写出简单的Spark Application，并在本地或集群上运行。 1." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://dounm.github.io/post/spark/" /><meta property="article:published_time" content="2016-09-10T23:46:08&#43;08:00"/>
+<meta property="article:modified_time" content="2016-09-10T23:46:08&#43;08:00"/>
+
+<meta itemprop="name" content="Spark上手指南">
+<meta itemprop="description" content="本文旨在给初学者一个对于Spark快速上手的指南。 目的：在读完本文后可以写出简单的Spark Application，并在本地或集群上运行。 1.">
+
+
+<meta itemprop="datePublished" content="2016-09-10T23:46:08&#43;08:00" />
+<meta itemprop="dateModified" content="2016-09-10T23:46:08&#43;08:00" />
+<meta itemprop="wordCount" content="3954">
+
+
+
+<meta itemprop="keywords" content="Spark," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Spark上手指南"/>
+<meta name="twitter:description" content="本文旨在给初学者一个对于Spark快速上手的指南。 目的：在读完本文后可以写出简单的Spark Application，并在本地或集群上运行。 1."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Even</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Even</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Spark上手指南</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-09-10 </span>
+        <div class="post-category">
+            <a href="/categories/distributedcomputing/"> DistributedComputing </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-spark介绍">1. Spark介绍</a>
+<ul>
+<li><a href="#1-1-spark计算框架">1.1. Spark计算框架</a></li>
+<li><a href="#1-2-spark-vs-mapreduce">1.2. Spark Vs MapReduce</a></li>
+<li><a href="#1-3-spark包含的组件">1.3. Spark包含的组件</a></li>
+</ul></li>
+<li><a href="#2-scala语法简介-https-www-zybuluo-com-dounm-note-514953">2. <a href="https://www.zybuluo.com/Dounm/note/514953">Scala语法简介</a></a></li>
+<li><a href="#3-rdd-resulient-distributed-dataset">3. RDD(Resulient Distributed Dataset)</a>
+<ul>
+<li><a href="#3-1-创建rdd">3.1. 创建RDD</a>
+<ul>
+<li><a href="#3-1-1-并行化collection">3.1.1. 并行化collection</a></li>
+<li><a href="#3-1-2-引用文件系统">3.1.2. 引用文件系统</a></li>
+</ul></li>
+<li><a href="#3-2-transformations-actions">3.2. Transformations&amp;Actions</a>
+<ul>
+<li><a href="#3-2-1-transformations">3.2.1. Transformations</a></li>
+<li><a href="#3-2-2-actions">3.2.2. Actions</a></li>
+<li><a href="#3-2-3-示例代码">3.2.3. 示例代码</a></li>
+</ul></li>
+<li><a href="#3-3-save-print-rdd">3.3. Save&amp;Print RDD</a></li>
+</ul></li>
+<li><a href="#4-spark-self-contained-application">4. Spark Self-contained Application</a>
+<ul>
+<li><a href="#4-1-如何编写spark-app">4.1. 如何编写Spark App</a></li>
+<li><a href="#4-2-build-tool">4.2. Build Tool</a>
+<ul>
+<li><a href="#4-2-1-maven">4.2.1. Maven</a></li>
+</ul></li>
+<li><a href="#4-3-提交application-spark-submit">4.3. 提交Application：spark-submit</a>
+<ul>
+<li><a href="#4-3-1-作业参数的配置">4.3.1. 作业参数的配置</a></li>
+</ul></li>
+<li><a href="#4-4-spark-shell">4.4. spark-shell</a></li>
+</ul></li>
+<li><a href="#5-mllib">5. MLlib</a>
+<ul>
+<li><a href="#5-1-mllib的基本数据结构">5.1. MLlib的基本数据结构</a>
+<ul>
+<li><a href="#5-1-1-localvector">5.1.1. LocalVector</a></li>
+<li><a href="#5-1-2-labeledpoint">5.1.2. LabeledPoint</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<p>本文旨在给初学者一个对于Spark快速上手的指南。
+目的：在读完本文后可以写出简单的Spark Application，并在本地或集群上运行。</p>
+
+<h2 id="1-spark介绍">1. Spark介绍</h2>
+
+<p><strong>Apache Spark</strong> 是一个开源计算框架（open source cluster computing framework）.最初由加州伯克利大学的AMPLab开发。</p>
+
+<h3 id="1-1-spark计算框架">1.1. Spark计算框架</h3>
+
+<p><img src="https://raw.githubusercontent.com/Dounm/TheFarmOfDounm/master/resources/images/spark/spark_0.png" alt="spark_0" />
+运行Spark计算框架需要一个<strong>cluster manager</strong>和一个<strong>distributed storage system</strong></p>
+
+<p>支持如下的cluster manager（包括但不仅限于）：</p>
+
+<ul>
+<li>standalone(native Spark cluster)</li>
+<li>Hadoop YARN</li>
+<li>Apache Mesos</li>
+</ul>
+
+<p>支持如下的distributed storage system（包括但不仅限于）：</p>
+
+<ul>
+<li>Hadoop Distributed File System(HDFS)</li>
+<li>MapR File System(MapR-FS)</li>
+<li>Cassandra</li>
+<li>OpenStack Swift</li>
+<li>Amazon S3</li>
+<li>Kudu</li>
+<li>Spark还支持伪分布式模式，即用本地文件系统来假装分布式存储（通常这种模式是用来进行开发和测试）</li>
+</ul>
+
+<h3 id="1-2-spark-vs-mapreduce">1.2. Spark Vs MapReduce</h3>
+
+<table>
+<thead>
+<tr>
+<th>框架</th>
+<th>特点</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>MapReduce</td>
+<td>一路计算的优秀解决方案。但是对于多路计算来说，数据数据处理流程中的每一步都需要一个Map阶段和一个Reduce阶段。在下一步开始之前，上一步的作业输出数据必须要存储到分布式文件系统中。因此，复制和磁盘存储会导致这种方式速度变慢</td>
+</tr>
+
+<tr>
+<td>Spark</td>
+<td>将中间结果缓存在内存中，而非写入磁盘。Spark会尝试在内存中存储尽可能多的数据然后再将其写入磁盘。它可以将某个数据集的一部分存入内存而剩余部分存入磁盘。</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="1-3-spark包含的组件">1.3. Spark包含的组件</h3>
+
+<ul>
+<li><strong>Spark Core</strong>：整个Spark框架的基石，通过基于RDD抽象的编程接口提供
+
+<ul>
+<li>distributed task dispatching</li>
+<li>scheduling</li>
+<li>basic I/O functions等功能</li>
+</ul></li>
+
+<li><p><strong>Spark MLlib</strong>：基于Spark Core的分布式机器学习框架。因为数据都存在内存中，所以会比数据存在磁盘上的框架快很多。
+包括了很多机器学习和统计学习算法，如下：</p>
+
+<ul>
+<li>summary statistics, correlations, stratified sampling, hypothesis testing, random data generation[10]</li>
+<li>classification and regression: support vector machines, logistic regression, linear regression, decision trees, naive Bayes classification</li>
+<li>collaborative filtering techniques including alternating least squares (ALS)</li>
+<li>cluster analysis methods including k-means, and Latent Dirichlet Allocation (LDA)</li>
+<li>dimensionality reduction techniques such as singular value decomposition (SVD), and principal component analysis (PCA)</li>
+<li>feature extraction and transformation functions</li>
+<li>optimization algorithms such as stochastic gradient descent, limited-memory BFGS (L-BFGS)</li>
+</ul></li>
+
+<li><p><strong>Spark SQL</strong>：使用数据抽象DataFrames来对结构化或半结构化的数据提供SQL查询支持。
+&gt; Spark SQL is a component on top of Spark Core that introduces a new data abstraction called DataFrames,[a] which provides support for structured and semi-structured data.</p></li>
+
+<li><p><strong>Spark Graphx</strong>: 基于Spark的分布式图像处理框架</p></li>
+
+<li><p><strong>Spark Streaming</strong>：
+&gt; Spark Streaming leverages Spark Core&rsquo;s fast scheduling capability to perform streaming analytics.</p></li>
+</ul>
+
+<h2 id="2-scala语法简介-https-www-zybuluo-com-dounm-note-514953">2. <a href="https://www.zybuluo.com/Dounm/note/514953">Scala语法简介</a></h2>
+
+<h2 id="3-rdd-resulient-distributed-dataset">3. RDD(Resulient Distributed Dataset)</h2>
+
+<p>Spark提供了基于<strong>resilient distributed dataset(RDD)</strong>的编程接口</p>
+
+<blockquote>
+<p>RDD is a  read-only collections of elements distributed over a cluster of machines, that is maintained in a fault-tolerant way.
+Spark&rsquo;s RDDs function as a working set for distributed programs that offers a (deliberately) restricted form of distributed shared memory.</p>
+</blockquote>
+
+<p>可以将RDD看做数据库中的一张表，其中可以保存任意类型数据
+特点：</p>
+
+<ul>
+<li>具有容错性：RDD知道如何重新创建和重新计算数据集</li>
+<li>可以帮助重新安排计算并优化数据处理过程</li>
+<li>不可变性：用Transformation修改RDD得到的是一个全新的RDD，而原有RDD保持不变</li>
+</ul>
+
+<h3 id="3-1-创建rdd">3.1. 创建RDD</h3>
+
+<p>有两种方式创建RDD数据集：</p>
+
+<ol>
+<li>将driver程序中已经存在的一个collection（如Array, List）并行化</li>
+<li>引用外部存储系统的一个数据集文件，例如本地文件系统，HDFS</li>
+</ol>
+
+<h4 id="3-1-1-并行化collection">3.1.1. 并行化collection</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">val data = Array(1, 2, 3, 4, 5)
+val distData = sc.parallelize(data) //sc是SparkContext类型的变量，用于访问cluster</pre></td></tr></table>
+</div>
+</div>
+<h4 id="3-1-2-引用文件系统">3.1.2. 引用文件系统</h4>
+
+<p>默认路径的是HDFS上。
+如果想要访问本地的文件的话，需要加上<code>file://</code>前缀，使用绝对路径。(如 <code>file:///home/me/spark/README.md</code>）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">//Spark-shell
+scala&gt; val distFile = sc.textFile(&#34;data.txt&#34;)
+distFile: RDD[String] = MappedRDD@1d4cee08
+scala&gt; val distFile = sc.textFile()
+ 
+//支持读取整个目录，压缩文件，通配符
+sc.textFile(&#34;/my/directory&#34;)
+sc.textFile(&#34;/my/directory/*.txt&#34;)
+sc.textFile(&#34;/my/directory/*.gz&#34;)</pre></td></tr></table>
+</div>
+</div>
+<h3 id="3-2-transformations-actions">3.2. Transformations&amp;Actions</h3>
+
+<h4 id="3-2-1-transformations">3.2.1. Transformations</h4>
+
+<p>Transformation会获取一个RDD作为参数，然后返回一个新的RDD，而非单个值。
+<strong>Transformations are lazy.</strong> 他们不是立刻计算新的RDD，而是等待action向dirver program返回值的时候才会计算</p>
+
+<p>常用Transformation:</p>
+
+<ul>
+<li><code>map(func)</code>：把RDD中的每个元素都传入func函数，将返回值形成一个新的RDD并返回</li>
+<li><code>filter(func)</code>：把RDD每个元素传入func，将func返回值为true的元素形成一个新的RDD返回</li>
+</ul>
+
+<h4 id="3-2-2-actions">3.2.2. Actions</h4>
+
+<p>Action计算并返回一个新的值给<strong>driver program</strong>。
+当在一个RDD对象上调用Action时，会在这一时刻计算全部的数据处理查询并返回结果值。</p>
+
+<p>常用Action:</p>
+
+<ul>
+<li><code>reduce(func)</code>：aggregate整个RDD数据集。func函数输入两个参数，返回一个参数。</li>
+<li><code>count()</code>：返回数据集中元素的个数</li>
+<li><code>first()</code>：返回数据集的第一个元素</li>
+<li><code>take(n)</code>：返回一个包含了RDD前n个元素的array</li>
+</ul>
+
+<h4 id="3-2-3-示例代码">3.2.3. 示例代码</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">val lines = sc.textFile(&#34;data.txt&#34;) //此时还没有将data.txt里的内容读入内存，Lines是RDD[Sting]类型的变量，但此时实质上只是指向文件的一个指针,
+
+val lineLengths = lines.map(s =&gt; s.length)    //LineLengths是RDD[Int]类型的变量，此时也没有立刻计算
+
+val totalLength = lineLengths.reduce((a, b) =&gt; a + b) //开始计算，并且返回计算出来的结果给totalLength这个变量，totalLength是Int型变量，而非RDD[Int]</pre></td></tr></table>
+</div>
+</div>
+<h3 id="3-3-save-print-rdd">3.3. Save&amp;Print RDD</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">myRDD.saveAsTextFile(&#34;/path&#34;)     //对RDD中的每个元素都调用toString()函数，然后按照每个element一行的格式输出到文件中
+
+myRDD.take(100).foreach(println)   //用于Spark-shell中，将RDD的前100个元素在控制台输出</pre></td></tr></table>
+</div>
+</div>
+<h2 id="4-spark-self-contained-application">4. Spark Self-contained Application</h2>
+
+<p>即提交到集群上运行的应用程序（用Scala或Python等编写）。
+每个Spark Application都有一个driver program来运行用户的main函数，然后在计算集群上运行并行操作。
+<img src="https://raw.githubusercontent.com/Dounm/TheFarmOfDounm/master/resources/images/spark/spark_1.png" alt="spark_1" /></p>
+
+<h3 id="4-1-如何编写spark-app">4.1. 如何编写Spark App</h3>
+
+<p>首先需要先创建SparkConf 对象来配置Application的一些信息。
+然后使用SparkConf对象来创建<code>SparkContext</code>对象来告诉Spark如何access集群。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">/* SimpleApp.scala */
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkContext._ //Before Spark 1.3.0, you need to explicitly import org.apache.spark.SparkContext._ to enable essential implicit conversions.
+import org.apache.spark.SparkConf
+object SimpleApp {
+  def main(args: Array[String]) {
+    val logFile = &#34;YOUR_SPARK_HOME/README.md&#34; // Should be some file on your system
+    val conf = new SparkConf().setAppName(&#34;Simple Application&#34;)  //AppName就是在集群监控页面现实的名字
+    val sc = new SparkContext(conf)
+    val logData = sc.textFile(logFile).cache()
+    val numAs = logData.filter(line =&gt; line.contains(&#34;a&#34;)).count()
+    val numBs = logData.filter(line =&gt; line.contains(&#34;b&#34;)).count()
+    println(&#34;Lines with a: %s, Lines with b: %s&#34;.format(numAs, numBs))
+  }
+}</pre></td></tr></table>
+</div>
+</div>
+<h3 id="4-2-build-tool">4.2. Build Tool</h3>
+
+<p>默认的Scala语言支持的打包工具是SBT和Maven，我们仅介绍下Maven</p>
+
+<h4 id="4-2-1-maven">4.2.1. Maven</h4>
+
+<blockquote>
+<p>Maven is a build automation tool used primarily for Java and Scala projects</p>
+</blockquote>
+
+<p>Maven编译的项目目录下要形成这种类型的文件结构<img src="https://raw.githubusercontent.com/Dounm/TheFarmOfDounm/master/resources/images/spark/spark_2.png" alt="spark_2" /></p>
+
+<p>其中<code>pom.xml</code>（全称Project Object Model）是用来存储Maven在编译时的配置，配置包括了项目名称，项目依赖。</p>
+
+<p>配置好了之后就是开始编译，我们使用<code>mvn package</code>的命令，就会把源码打包成jar，存放在target目录下。
+因为Maven在编译源码时会动态下载repository内最新版本lib和plug-ins，有时候会很慢，
+我们可以通过<code>–offline</code>参数来加快编译速度。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"><span class="nx">mvn</span> <span class="kn">package</span> <span class="c1">//首次编译
+</span><span class="c1"></span><span class="nx">mvn</span> <span class="kn">package</span> <span class="o">--</span><span class="nx">offline</span> <span class="o">//</span><span class="nx">后续编译</span></pre></td></tr></table>
+</div>
+</div>
+<h3 id="4-3-提交application-spark-submit">4.3. 提交Application：spark-submit</h3>
+
+<p>spark-submit可执行文件位于<code>SPARK_HOME/bin</code>文件夹内，用于提交Application并且运行。</p>
+
+<p>命令详情：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">/bin/spark-submit \
+--class &lt;main-class&gt;      //就是所编写的Application的类名，上例中就是SimpleApp
+--master &lt;master-url&gt; \   //cluster管理程序的URL，可选值：local, yarn, spark://HOST:PORT
+--deploy-mode &lt;deploy-mode&gt; \
+--conf &lt;key&gt;=&lt;value&gt; \    //application的配置，像--number-executors = 10就是设置10个executors来执行文件
+  ... # other options
+  &lt;application-jar&gt; \     //将源码利用maven打包出来的jar文件
+  [application-arguments]  //编写类的参数输入</pre></td></tr></table>
+</div>
+</div>
+<p>其中，参数<code>-master</code>有如下几种常用取值：</p>
+
+<table>
+<thead>
+<tr>
+<th>Master URL</th>
+<th>含义</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>local(default)</td>
+<td>在本地而非集群跑Spark作业，并且只有一个worker thread（所以，并事实上没有并行）</td>
+</tr>
+
+<tr>
+<td>local[k]</td>
+<td>在本地跑Spark Application，有k个worker thread</td>
+</tr>
+
+<tr>
+<td>spark://HOST:PORT</td>
+<td>连接到指定URL的standalone集群</td>
+</tr>
+
+<tr>
+<td>mesos://HOST:PORT</td>
+<td>连接到指定的Mesos集群</td>
+</tr>
+
+<tr>
+<td>yarn</td>
+<td>连接到默认的YARN集群。yarn集群在SPARK_HOME/conf/yarn-site.xml中指定</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="4-3-1-作业参数的配置">4.3.1. 作业参数的配置</h4>
+
+<p>spark中有三个地方可以配置作业的提交参数，优先级由高到低如下：</p>
+
+<ol>
+<li>源代码中使用SparkConf对象配置：<code>val conf = new SparkConf().setMaster(yarn).setAppName(&quot;&quot;)</code></li>
+<li>spark-submit中的提交参数：<code>--master = yarn</code></li>
+<li>SPARK_HOME/conf中的spark-default.conf文件的值：<code>spark.master yarn</code></li>
+</ol>
+
+<p><code>SPARK_HOME/conf</code>中的各种配置文件的作用如下：</p>
+
+<ul>
+<li>core-site.xml：配置默认的文件系统（即HDFS的相关信息）</li>
+<li>yarn-site.xml：yarn集群相关的配置</li>
+<li>spark-defaults.conf：包含一些spark常用的配置</li>
+</ul>
+
+<h3 id="4-4-spark-shell">4.4. spark-shell</h3>
+
+<p>spark-shell是和Python的交互式解释器类似的程序。
+内在的原理是调用spark-submit脚本，因此spark-shell也可以使用spark-submit的一些参数。
+<img src="https://raw.githubusercontent.com/Dounm/TheFarmOfDounm/master/resources/images/spark/spark_3.png" alt="spark_3" />
+由上图可知，spark-shell已经创造了一个SparkContext对象并命名为<code>sc</code>，因此我们无法再手动创建SparkContext对象了。
+但是可以在调用spark-shell命令时通过参数来设置sc连接哪个master。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ ./bin/spark-shell --master local[4]</pre></td></tr></table>
+</div>
+</div>
+<p>$ ./bin/spark-shell &ndash;master yarn</p>
+
+<h2 id="5-mllib">5. MLlib</h2>
+
+<h3 id="5-1-mllib的基本数据结构">5.1. MLlib的基本数据结构</h3>
+
+<h4 id="5-1-1-localvector">5.1.1. LocalVector</h4>
+
+<p>LocalVector是存储在单台机器上的向量。以0为下标起始，值为double。分为两种格式：dense, sparse</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">import org.apache.spark.mllib.linalg.{Vector, Vectors}
+ 
+// Create a dense vector (1.0, 0.0, 3.0)
+val dv: Vector = Vectors.dense(1.0, 0.0, 3.0)
+val dv: Vector = Vectors.dense(Array(1.0, 0.0, 3.0))
+ 
+ 
+// Create a sparse vector (1.0, 0.0, 3.0) by specifying its indices and values corresponding to nonzero entries.(3 is the size of vector)
+val sv1:Vector = Vectors.sparse(3, Array(0, 2), Array(1.0, 3.0))
+// Create a sparse vector (1.0, 0.0, 3.0) by specifying its nonzero entries (3 is the size of vector).
+val sv2: Vector = Vectors.sparse(3, List((0, 1.0), (2, 3.0)))</pre></td></tr></table>
+</div>
+</div>
+<h4 id="5-1-2-labeledpoint">5.1.2. LabeledPoint</h4>
+
+<p>LabeledPoint主要用于监督学习，即为一个LocalVector配上一个label。
+label为Double类型的：</p>
+
+<ul>
+<li>回归问题为任意double值</li>
+<li>二分类只能是0或1</li>
+<li>多分类为0,1,2,,,</li>
+</ul>
+
+<p>举例:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">import org.apache.spark.mllib.linalg.{Vector, Vectors}
+import org.apache.spark.mllib.regression.LabeledPoint
+ 
+// Create a labeled point with a positive label and a dense feature vector.
+val pos = LabeledPoint(1.0, Vectors.dense(1.0, 0.0, 3.0))
+// Create a labeled point with a negative label and a sparse feature vector.
+val neg = La beledPoint(0.0, Vectors.sparse(3, Array(0, 2), Array(1.0, 3.0)))</pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Dounm</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2016-09-10
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/spark/">Spark</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/scala/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Scala语法简介</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://dounm.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Dounm</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

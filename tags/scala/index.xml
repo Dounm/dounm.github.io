@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Scala on The Farm of Dounm</title>
+    <link>https://dounm.github.io/tags/scala/</link>
+    <description>Recent content in Scala on The Farm of Dounm</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 10 Sep 2016 23:46:08 +0800</lastBuildDate>
+    
+	<atom:link href="https://dounm.github.io/tags/scala/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Scala语法简介</title>
+      <link>https://dounm.github.io/post/scala/</link>
+      <pubDate>Sat, 10 Sep 2016 23:46:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/scala/</guid>
+      <description>1. Scala语言特性 Scala(short for Scalable Language)是一种混合了面向对象和函数式编程的语言。 具有如下特性： 面向对象：Scala是一种纯的面向对象语言</description>
+    </item>
+    
+  </channel>
+</rss>
