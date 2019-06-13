@@ -23,6 +23,15 @@ It makes use of a variety of open source projects including:
     </item>
     
     <item>
+      <title>How to Think Better之以手助脑</title>
+      <link>https://dounm.github.io/post/think_better_with_hand/</link>
+      <pubDate>Sat, 27 Apr 2019 15:28:55 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/think_better_with_hand/</guid>
+      <description>人人都会思考，人人都爱思考，但只有少数人擅长思考。 思考本身是有技巧和方法的，本文中，我就来探讨一下常见而又容易被忽视的一种方法：手写笔记法。</description>
+    </item>
+    
+    <item>
       <title>CUDA程序调优指南（三）：BlockNum和ThreadNumPerBlock</title>
       <link>https://dounm.github.io/post/cuda_2/</link>
       <pubDate>Wed, 12 Dec 2018 23:48:08 +0800</pubDate>
