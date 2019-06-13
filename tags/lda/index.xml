@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>LDA on The Farm of Dounm</title>
+    <link>https://dounm.github.io/tags/lda/</link>
+    <description>Recent content in LDA on The Farm of Dounm</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 11 Jul 2016 23:48:08 +0800</lastBuildDate>
+    
+	<atom:link href="https://dounm.github.io/tags/lda/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>LDA算法理解（二）：Gibbs Sampling</title>
+      <link>https://dounm.github.io/post/lda_1/</link>
+      <pubDate>Mon, 11 Jul 2016 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/lda_1/</guid>
+      <description>系列文章分为两部分： LDA算法理解（一）：数学基础 LDA算法理解（二）：Gibbs Sampling</description>
+    </item>
+    
+    <item>
+      <title>LDA算法理解（一）：数学基础</title>
+      <link>https://dounm.github.io/post/lda_0/</link>
+      <pubDate>Sun, 10 Jul 2016 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/lda_0/</guid>
+      <description>系列文章分为两部分： LDA算法理解（一）：数学基础 LDA算法理解（二）：Gibbs Sampling</description>
+    </item>
+    
+  </channel>
+</rss>

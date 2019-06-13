@@ -47,5 +47,23 @@
       <description>系列文章分为两部分： Word2Vec-知其然知其所以然（一）：背景知识 Word2Vec-知其然知其所以然（二）：模型详解</description>
     </item>
     
+    <item>
+      <title>LDA算法理解（二）：Gibbs Sampling</title>
+      <link>https://dounm.github.io/post/lda_1/</link>
+      <pubDate>Mon, 11 Jul 2016 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/lda_1/</guid>
+      <description>系列文章分为两部分： LDA算法理解（一）：数学基础 LDA算法理解（二）：Gibbs Sampling</description>
+    </item>
+    
+    <item>
+      <title>LDA算法理解（一）：数学基础</title>
+      <link>https://dounm.github.io/post/lda_0/</link>
+      <pubDate>Sun, 10 Jul 2016 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/lda_0/</guid>
+      <description>系列文章分为两部分： LDA算法理解（一）：数学基础 LDA算法理解（二）：Gibbs Sampling</description>
+    </item>
+    
   </channel>
 </rss>

@@ -157,5 +157,23 @@ It makes use of a variety of open source projects including:
       <description>本文旨在给初学者一个对于Spark快速上手的指南。 目的：在读完本文后可以写出简单的Spark Application，并在本地或集群上运行。 1.</description>
     </item>
     
+    <item>
+      <title>LDA算法理解（二）：Gibbs Sampling</title>
+      <link>https://dounm.github.io/post/lda_1/</link>
+      <pubDate>Mon, 11 Jul 2016 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/lda_1/</guid>
+      <description>系列文章分为两部分： LDA算法理解（一）：数学基础 LDA算法理解（二）：Gibbs Sampling</description>
+    </item>
+    
+    <item>
+      <title>LDA算法理解（一）：数学基础</title>
+      <link>https://dounm.github.io/post/lda_0/</link>
+      <pubDate>Sun, 10 Jul 2016 23:48:08 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/lda_0/</guid>
+      <description>系列文章分为两部分： LDA算法理解（一）：数学基础 LDA算法理解（二）：Gibbs Sampling</description>
+    </item>
+    
   </channel>
 </rss>
