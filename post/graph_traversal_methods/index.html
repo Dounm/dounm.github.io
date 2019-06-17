@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>图遍历方法：ForEachNode &#43; DFS Vs. TopoForEachNode - The Farm of Dounm</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Dounm" /><meta name="description" content="在图遍历领域，有一类常见问题：在DAG图上，以某一类节点为起点，找到并标记其下游的符合某些条件的节点。 1 思路一：ForEachNode &#43; DFS 对" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.52 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://dounm.github.io/post/graph_traversal_methods/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="图遍历方法：ForEachNode &#43; DFS Vs. TopoForEachNode" />
+<meta property="og:description" content="在图遍历领域，有一类常见问题：在DAG图上，以某一类节点为起点，找到并标记其下游的符合某些条件的节点。 1 思路一：ForEachNode &#43; DFS 对" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://dounm.github.io/post/graph_traversal_methods/" /><meta property="article:published_time" content="2019-06-17T18:10:30&#43;08:00"/>
+<meta property="article:modified_time" content="2019-06-17T18:10:30&#43;08:00"/>
+
+<meta itemprop="name" content="图遍历方法：ForEachNode &#43; DFS Vs. TopoForEachNode">
+<meta itemprop="description" content="在图遍历领域，有一类常见问题：在DAG图上，以某一类节点为起点，找到并标记其下游的符合某些条件的节点。 1 思路一：ForEachNode &#43; DFS 对">
+
+
+<meta itemprop="datePublished" content="2019-06-17T18:10:30&#43;08:00" />
+<meta itemprop="dateModified" content="2019-06-17T18:10:30&#43;08:00" />
+<meta itemprop="wordCount" content="1584">
+
+
+
+<meta itemprop="keywords" content="DFS,TOPO," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="图遍历方法：ForEachNode &#43; DFS Vs. TopoForEachNode"/>
+<meta name="twitter:description" content="在图遍历领域，有一类常见问题：在DAG图上，以某一类节点为起点，找到并标记其下游的符合某些条件的节点。 1 思路一：ForEachNode &#43; DFS 对"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">The Farm of Dounm</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">The Farm of Dounm</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">图遍历方法：ForEachNode &#43; DFS Vs. TopoForEachNode</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-06-17 </span>
+        <div class="post-category">
+            <a href="/categories/%E5%9B%BE%E8%AE%BA/"> 图论 </a>
+            </div>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-思路一-foreachnode-dfs">1 思路一：ForEachNode + DFS</a>
+<ul>
+<li><a href="#1-1-代码">1.1 代码</a></li>
+<li><a href="#1-2-代码解析">1.2 代码解析</a></li>
+</ul></li>
+<li><a href="#2-思路二-topodfs遍历">2 思路二：TopoDFS遍历</a>
+<ul>
+<li><a href="#2-1-代码">2.1 代码</a></li>
+<li><a href="#2-2-代码解析">2.2 代码解析</a></li>
+<li><a href="#2-3-证明-思路一与思路二等价">2.3 证明：思路一与思路二等价</a></li>
+</ul></li>
+<li><a href="#3-总结">3 总结</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<p>在图遍历领域，有一类常见问题：<strong>在DAG图上，以某一类节点为起点，找到并标记其下游的符合某些条件的节点</strong>。</p>
+
+<h2 id="1-思路一-foreachnode-dfs">1 思路一：ForEachNode + DFS</h2>
+
+<p>对于此类问题来说，最常见的思路是：<code>ForEachNode + DFS</code>，即循环遍历图中每个节点，判断图中节点是否满足起始条件，满足则以其为起始节点，进行DFS遍历。</p>
+
+<p>粗略来看，这个解法本质上是<strong>循环+DFS</strong>，时间复杂度应该是<code>o(n^2)</code>。但如果跳过那些被访问过的节点，那么考虑到每个节点只会被遍历到一次，其时间复杂度就下降为<code>o(n)</code>。</p>
+
+<h3 id="1-1-代码">1.1 代码</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Key</span><span class="p">,</span> <span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Hash</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">hash</span><span class="o">&lt;</span><span class="n">Key</span><span class="o">&gt;&gt;</span>
+<span class="k">using</span> <span class="n">HashMap</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">Key</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Hash</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Key</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Hash</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">hash</span><span class="o">&lt;</span><span class="n">Key</span><span class="o">&gt;&gt;</span>
+<span class="k">using</span> <span class="n">HashSet</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">Key</span><span class="p">,</span> <span class="n">Hash</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="k">class</span><span class="err"> </span><span class="nc">Node</span> <span class="p">{</span>
+ <span class="k">public</span><span class="o">:</span>
+  <span class="kt">void</span> <span class="n">ForEachNodeOnOutEdge</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span><span class="p">);</span>
+  <span class="kt">void</span> <span class="nf">ForEachNodeOnInEdge</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span><span class="p">);</span>
+  <span class="p">...</span> 
+<span class="p">};</span>
+
+<span class="k">class</span><span class="err"> </span><span class="nc">Graph</span> <span class="p">{</span>
+ <span class="k">public</span><span class="o">:</span>
+  <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">*&gt;&amp;</span> <span class="n">nodes</span><span class="p">();</span>
+  <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">*&gt;&amp;</span> <span class="n">start_nodes</span><span class="p">();</span>
+  <span class="p">...</span> 
+<span class="p">};</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">MapT</span><span class="p">,</span> <span class="k">typename</span> <span class="n">KeyT</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">IsKeyFound</span><span class="p">(</span><span class="k">const</span> <span class="n">MatT</span><span class="o">&amp;</span> <span class="n">m</span><span class="p">,</span> <span class="k">const</span> <span class="n">KeyT</span><span class="o">&amp;</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">!=</span> <span class="n">m</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="n">DfsGraphTraversal</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">Graph</span><span class="o">&amp;</span> <span class="n">graph</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">*&gt;&amp;</span> <span class="n">starts</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">ForEachNextNode</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">IsNodeTraversable</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">Handler</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">*&gt;</span> <span class="n">visited</span><span class="p">;</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">stack</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">*&gt;</span> <span class="n">stack</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="nl">start</span> <span class="p">:</span> <span class="n">starts</span><span class="p">)</span> <span class="p">{</span> <span class="n">stack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">start</span><span class="p">);</span> <span class="p">}</span>
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">stack</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="n">cur_node</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+    <span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">IsNodeTraversable</span><span class="p">(</span><span class="n">cur_node</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">IsKeyFound</span><span class="p">(</span><span class="n">visited</span><span class="p">,</span> <span class="n">cur_node</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">Handler</span><span class="p">(</span><span class="n">cur_node</span><span class="p">);</span>
+      <span class="n">CHECK</span><span class="p">(</span><span class="n">visited</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">cur_node</span><span class="p">).</span><span class="n">second</span><span class="p">);</span>
+      <span class="n">ForEachNextNode</span><span class="p">(</span><span class="n">cur_node</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">stack</span><span class="p">](</span><span class="n">Node</span><span class="o">*</span> <span class="n">next</span><span class="p">)</span> <span class="p">{</span> <span class="n">stack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">next</span><span class="p">);</span> <span class="p">});</span><span class="o">-</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// ForEachNode + DFS
+</span><span class="c1"></span><span class="kt">void</span> <span class="n">GraphTraversal1</span><span class="p">(</span><span class="k">const</span> <span class="n">Graph</span><span class="o">&amp;</span> <span class="n">graph</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">IsStartNode</span><span class="p">,</span><span class="o">-</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">IsNodeTraversable</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">NodeHandler</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">*&gt;</span> <span class="n">visited</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="n">Node</span><span class="o">*</span> <span class="nl">node</span> <span class="p">:</span> <span class="n">graph</span><span class="p">.</span><span class="n">nodes</span><span class="p">())</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">IsKeyFound</span><span class="p">(</span><span class="n">visited</span><span class="p">,</span> <span class="n">node</span><span class="p">))</span> <span class="p">{</span> <span class="k">continue</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">IsStartNode</span><span class="p">(</span><span class="n">node</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">DfsGraphTraversal</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">*&gt;</span><span class="p">{</span><span class="n">node</span><span class="p">},</span>
+          <span class="o">&amp;</span><span class="n">Node</span><span class="o">::</span><span class="n">ForEachNodeOnOutEdge</span><span class="p">,</span>
+          <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">Node</span><span class="o">*</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">!</span><span class="n">IsKeyFound</span><span class="p">(</span><span class="n">visited</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">IsNodeTraversable</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+          <span class="p">},</span>
+          <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">Node</span><span class="o">*</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">CHECK</span><span class="p">(</span><span class="n">visited</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">node</span><span class="p">).</span><span class="n">second</span><span class="p">);</span>
+            <span class="n">NodeHandler</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+          <span class="p">});</span> 
+    <span class="p">}</span> 
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="1-2-代码解析">1.2 代码解析</h3>
+
+<p>如上代码所示，对于思路1来说，其蕴含了三个判断条件</p>
+
+<ul>
+<li><code>IsStartNode()</code>：判断该节点是否能作为DFS的起始节点</li>
+<li><code>IsNodeTraversable()</code>：如果为<code>true</code>，则表明该节点应该被标记；否则跳过该节点，不再遍历其下游节点。</li>
+<li><strong>隐藏条件</strong>：因为是在图上遍历，所以DFS过程中每个被遍历到的节点，其父节点都得满足<code>IsStartNode() || IsNodeTraversable()</code>的条件。</li>
+</ul>
+
+<h2 id="2-思路二-topodfs遍历">2 思路二：TopoDFS遍历</h2>
+
+<p>思路一的代码里，引入了一个变量<code>visited</code>来保存被访问过的节点，然后跳过被访问的节点来保证时间复杂度为<code>o(n)</code>。</p>
+
+<p>问题在于，我们需要小心的维护<code>visited</code>，来保证其不会出错，因此导致代码比较凌乱。</p>
+
+<p>因此思路二使用了Topo遍历的方法，利用Topo序来自然而然的保证每个节点只用遍历一次。</p>
+
+<h3 id="2-1-代码">2.1 代码</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="nf">DfsTopoGraphTraversal</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">Graph</span><span class="o">&amp;</span> <span class="n">graph</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">*&gt;&amp;</span> <span class="n">starts</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;&amp;</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">ForEachInNode</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;&amp;</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">ForEachOutNode</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">Handler</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+  <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">*</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">be_visited</span><span class="p">;</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">stack</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">*&gt;</span> <span class="n">stack</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="nl">start</span> <span class="p">:</span> <span class="n">starts</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">stack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
+    <span class="n">ForEachInNode</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span> <span class="p">{</span> <span class="n">assert</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span> <span class="p">});</span> 
+  <span class="p">}</span>
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">stack</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="n">cur_node</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+    <span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+    <span class="n">Handler</span><span class="p">(</span><span class="n">cur_node</span><span class="p">);</span>
+    <span class="n">be_visited</span><span class="p">[</span><span class="n">cur_node</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="n">ForEachOutNode</span><span class="p">(</span><span class="n">cur_node</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">Node</span><span class="o">*</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kt">bool</span> <span class="n">is_ready</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+      <span class="n">ForEachInNode</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">Node</span><span class="o">*</span> <span class="n">in</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_ready</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">be_visited</span><span class="p">[</span><span class="n">in</span><span class="p">])</span> <span class="p">{</span> <span class="n">is_ready</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+      <span class="p">});</span> 
+      <span class="k">if</span> <span class="p">(</span><span class="n">is_ready</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">be_visited</span><span class="p">[</span><span class="n">out</span><span class="p">])</span> <span class="p">{</span> <span class="n">stack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">out</span><span class="p">);</span> <span class="p">}</span>
+    <span class="p">});</span> 
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// TopoDfs
+</span><span class="c1"></span><span class="kt">void</span> <span class="nf">GraphTraversal2</span><span class="p">(</span><span class="k">const</span> <span class="n">Graph</span><span class="o">&amp;</span> <span class="n">graph</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">IsFatherNodeSatisfied</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">IsCurNodeSatisfied</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">NodeHandler</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">HandlerWithCondition</span> <span class="o">=</span> <span class="p">[](</span><span class="n">Node</span><span class="o">*</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">IsCurNodeSatisfied</span><span class="p">(</span><span class="n">node</span><span class="p">))</span> <span class="p">{</span>
+      <span class="kt">bool</span> <span class="n">is_one_father_of_node_satisfied</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+      <span class="n">node</span><span class="o">-&gt;</span><span class="n">ForEachNodeOnInEdge</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](</span><span class="n">Node</span><span class="o">*</span> <span class="n">father_node</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">IsFatherNodeSatisfied</span><span class="p">(</span><span class="n">father_node</span><span class="p">))</span> <span class="p">{</span> <span class="n">is_one_father_of_node_satisfied</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span> <span class="p">}</span>
+      <span class="p">});</span> 
+      <span class="k">if</span> <span class="p">(</span><span class="n">is_one_father_of_node_satisfied</span><span class="p">)</span> <span class="p">{</span> <span class="n">NodeHandler</span><span class="p">(</span><span class="n">node</span><span class="p">);</span> <span class="p">}</span>
+    <span class="p">}</span> 
+  <span class="p">};</span>
+  <span class="n">DfsTopoGraphTraversal</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">graph</span><span class="p">.</span><span class="n">start_nodes</span><span class="p">(),</span>
+      <span class="o">&amp;</span><span class="n">Node</span><span class="o">::</span><span class="n">ForEachNodeOnInEdge</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Node</span><span class="o">::</span><span class="n">ForEachNodeOnOutEdge</span><span class="p">,</span>
+      <span class="n">HandlerWithCondition</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="2-2-代码解析">2.2 代码解析</h3>
+
+<p>思路二的代码中，其实也蕴含了两个判断条件：</p>
+
+<ul>
+<li><p><code>IsCurNodeSatisfied()</code>：当前节点是否满足被标记的条件</p></li>
+
+<li><p><code>IsFatherNodeSatisfied()</code>：当前节点的父亲节点是否满足条件。</p></li>
+</ul>
+
+<h3 id="2-3-证明-思路一与思路二等价">2.3 证明：思路一与思路二等价</h3>
+
+<p>前面提到，思路一有三个条件</p>
+
+<ul>
+<li>$A$条件：<code>IsStartNode()</code></li>
+<li>$B$条件：<code>IsNodeTraversable()</code></li>
+<li>$C$条件：DFS被遍历节点的父节点满足<code>IsStartNode() || IsNodeTraversable()</code></li>
+</ul>
+
+<p>而思路二有两个条件：</p>
+
+<ul>
+<li><p>$D$条件：<code>IsCurNodeSatisfied()</code></p></li>
+
+<li><p>$E$条件：<code>IsFatherNodeSatisfied()</code></p></li>
+</ul>
+
+<p>仔细对比思路一二，可得</p>
+
+<ol>
+<li>$B$ 和 $D$ 条件都是对当前被遍历到的节点是否满足被标记条件的描述，所以在描述能力上 $B=D​$</li>
+<li>$C$ 和 $E$ 条件都是描述当前被遍历节点的父节点所需满足的条件的，所以描述能力上，同样有 $C=E$</li>
+<li>而对于 $A$ 条件来说，其被蕴含在了 $C$ 条件中，而又因为描述能力上 $C=E$，所以 $A$ 也被蕴含在 $E$ 中。</li>
+</ol>
+
+<p>所以，思路二的两个条件足以表达思路一的三个条件，再考虑到有了Topo序就无需临时变量<code>visited</code>来跳过重复遍历的节点，所以思路二更优。</p>
+
+<h2 id="3-总结">3 总结</h2>
+
+<p>总的来说，两种思路 <code>TopoDFS</code>和<code>ForEachNode+DFS</code>二者在对问题的描述能力上是等价的，而且算法时间复杂度都是<code>o(n)</code>。但考虑到代码实现的简单和健壮性，所以还是推荐使用<code>TopoDFS</code>的方法。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Dounm</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-06-17
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/dfs/">DFS</a>
+          <a href="/tags/topo/">TOPO</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/think_better_with_hand/">
+            <span class="next-text nav-default">How to Think Better之以手助脑</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="niuchong893184@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/Dounm" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/niu-chong/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://dounm.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Dounm</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
