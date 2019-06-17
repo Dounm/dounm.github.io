@@ -50,7 +50,7 @@
 
 <meta itemprop="datePublished" content="2019-06-17T18:10:30&#43;08:00" />
 <meta itemprop="dateModified" content="2019-06-17T18:10:30&#43;08:00" />
-<meta itemprop="wordCount" content="1584">
+<meta itemprop="wordCount" content="1571">
 
 
 
@@ -370,6 +370,12 @@
 </span><span class="lnt">42
 </span><span class="lnt">43
 </span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="nf">DfsTopoGraphTraversal</span><span class="p">(</span>
@@ -399,10 +405,16 @@
 <span class="p">}</span>
 
 <span class="c1">// TopoDfs
-</span><span class="c1"></span><span class="kt">void</span> <span class="nf">GraphTraversal2</span><span class="p">(</span><span class="k">const</span> <span class="n">Graph</span><span class="o">&amp;</span> <span class="n">graph</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">IsFatherNodeSatisfied</span><span class="p">,</span>
+</span><span class="c1"></span><span class="kt">void</span> <span class="nf">GraphTraversal2</span><span class="p">(</span><span class="k">const</span> <span class="n">Graph</span><span class="o">&amp;</span> <span class="n">graph</span><span class="p">,</span> 
+    <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">IsCurNodeStartNode</span><span class="p">,</span>
     <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">IsCurNodeSatisfied</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">IsFatherNodeSatisfied</span><span class="p">,</span>
     <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">NodeHandler</span><span class="p">)</span> <span class="p">{</span>
   <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">HandlerWithCondition</span> <span class="o">=</span> <span class="p">[](</span><span class="n">Node</span><span class="o">*</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">IsCurNodeStartNode</span><span class="p">(</span><span class="n">node</span><span class="p">))</span> <span class="p">{</span> 
+      <span class="n">NodeHandler</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">IsCurNodeSatisfied</span><span class="p">(</span><span class="n">node</span><span class="p">))</span> <span class="p">{</span>
       <span class="kt">bool</span> <span class="n">is_one_father_of_node_satisfied</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
       <span class="n">node</span><span class="o">-&gt;</span><span class="n">ForEachNodeOnInEdge</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](</span><span class="n">Node</span><span class="o">*</span> <span class="n">father_node</span><span class="p">)</span> <span class="p">{</span>
@@ -420,9 +432,11 @@
 </div>
 <h3 id="2-2-代码解析">2.2 代码解析</h3>
 
-<p>思路二的代码中，其实也蕴含了两个判断条件：</p>
+<p>思路二的代码中，其实也蕴含了三个判断条件：</p>
 
 <ul>
+<li><p><code>IsCurNodeStartNode()</code>: 当前节点是否是遍历的起始节点</p></li>
+
 <li><p><code>IsCurNodeSatisfied()</code>：当前节点是否满足被标记的条件</p></li>
 
 <li><p><code>IsFatherNodeSatisfied()</code>：当前节点的父亲节点是否满足条件。</p></li>
@@ -438,23 +452,25 @@
 <li>$C$条件：DFS被遍历节点的父节点满足<code>IsStartNode() || IsNodeTraversable()</code></li>
 </ul>
 
-<p>而思路二有两个条件：</p>
+<p>而思路二也有三个条件：</p>
 
 <ul>
-<li><p>$D$条件：<code>IsCurNodeSatisfied()</code></p></li>
+<li><p>$D$条件：<code>IsCurNodeStartNode()</code></p></li>
 
-<li><p>$E$条件：<code>IsFatherNodeSatisfied()</code></p></li>
+<li><p>$E$条件：<code>IsCurNodeSatisfied()</code></p></li>
+
+<li><p>$F$条件：<code>IsFatherNodeSatisfied()</code></p></li>
 </ul>
 
 <p>仔细对比思路一二，可得</p>
 
 <ol>
-<li>$B$ 和 $D$ 条件都是对当前被遍历到的节点是否满足被标记条件的描述，所以在描述能力上 $B=D​$</li>
-<li>$C$ 和 $E$ 条件都是描述当前被遍历节点的父节点所需满足的条件的，所以描述能力上，同样有 $C=E$</li>
-<li>而对于 $A$ 条件来说，其被蕴含在了 $C$ 条件中，而又因为描述能力上 $C=E$，所以 $A$ 也被蕴含在 $E$ 中。</li>
+<li>$A​$ 和 $D​$ 都是对遍历起始节点的描述，因此描述能力上 $A=D​$</li>
+<li>$B$ 和 $E$ 条件都是对当前被遍历到的节点是否满足被标记条件的描述，所以在描述能力上 $B=E$</li>
+<li>$C$ 和 $F$ 条件都是描述当前被遍历节点的父节点所需满足的条件的，所以描述能力上，同样有 $C=F$</li>
 </ol>
 
-<p>所以，思路二的两个条件足以表达思路一的三个条件，再考虑到有了Topo序就无需临时变量<code>visited</code>来跳过重复遍历的节点，所以思路二更优。</p>
+<p>所以，思路一和思路二是等价的。</p>
 
 <h2 id="3-总结">3 总结</h2>
 
