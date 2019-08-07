@@ -21,6 +21,15 @@
     </item>
     
     <item>
+      <title>概率悖论与系统思维</title>
+      <link>https://dounm.github.io/post/prob_paradox_n_systematic_thinking/</link>
+      <pubDate>Tue, 06 Aug 2019 21:28:55 +0800</pubDate>
+      
+      <guid>https://dounm.github.io/post/prob_paradox_n_systematic_thinking/</guid>
+      <description>本文讨论一个概率悖论问题，这个问题是之前和朋友们聊天时讨论过的，我觉得十分有趣，也引发了我的一些思考，故此记录如下。 该问题描述如下：假设有3</description>
+    </item>
+    
+    <item>
       <title>图遍历方法：ForEachNode &#43; DFS Vs. TopoForEachNode</title>
       <link>https://dounm.github.io/post/graph_traversal_methods/</link>
       <pubDate>Mon, 17 Jun 2019 18:10:30 +0800</pubDate>

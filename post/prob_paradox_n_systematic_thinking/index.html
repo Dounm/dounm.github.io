@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>概率悖论与系统思维 - The Farm of Dounm</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Dounm" /><meta name="description" content="本文讨论一个概率悖论问题，这个问题是之前和朋友们聊天时讨论过的，我觉得十分有趣，也引发了我的一些思考，故此记录如下。 该问题描述如下：假设有3" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.52 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://dounm.github.io/post/prob_paradox_n_systematic_thinking/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="概率悖论与系统思维" />
+<meta property="og:description" content="本文讨论一个概率悖论问题，这个问题是之前和朋友们聊天时讨论过的，我觉得十分有趣，也引发了我的一些思考，故此记录如下。 该问题描述如下：假设有3" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://dounm.github.io/post/prob_paradox_n_systematic_thinking/" /><meta property="article:published_time" content="2019-08-06T21:28:55&#43;08:00"/>
+<meta property="article:modified_time" content="2019-08-06T21:28:55&#43;08:00"/>
+
+<meta itemprop="name" content="概率悖论与系统思维">
+<meta itemprop="description" content="本文讨论一个概率悖论问题，这个问题是之前和朋友们聊天时讨论过的，我觉得十分有趣，也引发了我的一些思考，故此记录如下。 该问题描述如下：假设有3">
+
+
+<meta itemprop="datePublished" content="2019-08-06T21:28:55&#43;08:00" />
+<meta itemprop="dateModified" content="2019-08-06T21:28:55&#43;08:00" />
+<meta itemprop="wordCount" content="1306">
+
+
+
+<meta itemprop="keywords" content="Thinking," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="概率悖论与系统思维"/>
+<meta name="twitter:description" content="本文讨论一个概率悖论问题，这个问题是之前和朋友们聊天时讨论过的，我觉得十分有趣，也引发了我的一些思考，故此记录如下。 该问题描述如下：假设有3"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">The Farm of Dounm</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">The Farm of Dounm</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">概率悖论与系统思维</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-08-06 </span>
+        <div class="post-category">
+            <a href="/categories/meta-knowledge/"> Meta-Knowledge </a>
+            </div>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+    <div class="post-content">
+      <p>本文讨论一个概率悖论问题，这个问题是之前和朋友们聊天时讨论过的，我觉得十分有趣，也引发了我的一些思考，故此记录如下。</p>
+
+<p>该问题描述如下：假设有3个完全一样的箱子，其中只有1个箱子拥有大奖。游戏规则是，你先选中一个箱子，然后主持人从另外两个箱子中排除一个没有大奖的箱子。然后再给你一次机会，让你在之前选中的箱子和剩下的一个箱子中重新选择，问你是切换自己原有选择的中奖概率大，还是保持原有选择的中奖概率大？</p>
+
+<p>几乎所有人在第一次面对这个问题的时候，都会觉着，无论切换还是不切换，中奖的概率概率都一样，是1/2。</p>
+
+<p>但概率悖论之所以成为悖论，就是因为其有悖直觉。上述问题的正确答案应该是切换自己的选择，因为另一个箱子中奖的概率是2/3，而非多数人认为的1/2。</p>
+
+<hr />
+
+<p>我们来详细分析下这个问题，假设现在有A,B,C共3个箱子，其中A箱子有大奖。</p>
+
+<p>如果我们第一次选择A，那么主持人会在B,C中排除一个，但无论排除哪一个，只要我们选择“转换”的操作，那么就必然选不中大奖。换句话说，在一开始选中A的条件下，第二次选择“转换”的操作获得大奖的概率就是0。</p>
+
+<p>如果我们第一次选择B，那么主持人必然会帮我们排除错误选项C，所以第二次选择“转换”必然能获得大奖。即，第一次选中B的条件下，第二次选择“转换”的操作获得大奖的概率是1。</p>
+
+<p>同理，如果我们第一次选择C，那么主持人必然会帮我们排除错误选项B，所以第二次选择“转换”也必然能获得大奖，概率也是1。</p>
+
+<p>考虑到第一次选择的时候，因为没有任何先验知识，我们选择A,B,C的概率相等，都是1/3，所以对于整个事件来说，第二次选择“转换”中奖的概率就是2/3，选择“不转换”中奖的概率就是1/3。</p>
+
+<hr />
+
+<p>那么为什么大多数人都觉着第二次时选哪个都一样呢？我觉着罪魁祸首是一个根植于我们潜意识里的习惯：<strong>在没有明显的先验知识的情况下，我们倾向于把事件发生的概率均匀化，即认为事件发生的概率是均匀分布</strong>。</p>
+
+<p>把未知概率事件当成均匀分布其实是一件很合理的事情，因为我们事先并不知道关于事件的任何先验知识，所以把事件发生概率看做均匀概率有助于我们消除偏见的干扰，得到更正确的结果。在上述概率悖论中，我们也是把第一次选择当成均匀分布，认为在三个箱子中选中大奖的概率是1/3。</p>
+
+<p>但问题的关键在于，在第二次选择之前，我们已经得知了关于事件的一些先验知识（即主持人帮我们排除了一个错误箱子），所以当我们面对第二次选择时，此时事件的先验概率分布就不能看做是均匀分布了，而应该是基于得到的先验知识计算出的具体的先验概率分布。</p>
+
+<p>但我们的习惯却驱使我们把第二次选择当成一个单独的事件，然后把均匀分布当做它的先验概率分布，这样的话，自然会得到第二次选择“转换”与“不转换”没差别的结论了。</p>
+
+<p>换句话说，我们之所以会觉着蒙提霍尔概率悖论有悖直觉，其实是<strong>因为我们缺乏系统思维，把有前置知识的事件当作了独立事件</strong>，进而把该独立事件的先验概率分布认作是均匀分布，得到错误的结果。</p>
+
+<p>而从现实的角度来看，现实世界中所有事件都存在前因，如果缺乏系统思维，忽略前因，把事件当做独立事件，就很容易得到错误的判断，导致决策失误。</p>
+
+<hr />
+
+<p>PS. 上述概率悖论问题即“蒙提霍尔问题”，感兴趣的可以查下相关资料。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Dounm</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-08-06
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/thinking/">Thinking</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/graph_traversal_methods/">
+            <span class="next-text nav-default">图遍历方法：ForEachNode &#43; DFS Vs. TopoForEachNode</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="niuchong893184@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/Dounm" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/niu-chong/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://dounm.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Dounm</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
